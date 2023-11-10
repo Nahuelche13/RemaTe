@@ -2,233 +2,248 @@
 <interface>
   <requires lib="gtk" version="4.0"/>
   <object class="AdwWindow" id="_root">
-    <child>
+    <property name="content">
       <object class="GtkBox">
-        <property name="orientation">0</property>
+        <property name="orientation">1</property>
+        <child>
+          <object class="AdwHeaderBar">
+            <property name="title-widget">
+              <object class="AdwWindowTitle">
+                <property name="title">Articulos</property>
+              </object>
+            </property>
+          </object>
+        </child>
         <child>
           <object class="GtkBox">
-            <property name="hexpand">false</property>
-            <property name="vexpand">false</property>
-            <property name="orientation">1</property>
-            <property name="margin-bottom">24</property>
-            <property name="margin-end">24</property>
-            <property name="margin-start">24</property>
-            <property name="margin-top">24</property>
-            <property name="spacing">24</property>
+            <property name="orientation">0</property>
             <child>
-              <object class="GtkLabel">
-                <property name="label">Articulo</property>
-                <style>
-                  <class name="title-1"/>
-                </style>
-              </object>
-            </child>
-            <child>
-              <object class="AdwPreferencesGroup">
+              <object class="GtkBox">
+                <property name="hexpand">false</property>
+                <property name="vexpand">false</property>
+                <property name="orientation">1</property>
+                <property name="margin-bottom">24</property>
+                <property name="margin-end">24</property>
+                <property name="margin-start">24</property>
+                <property name="margin-top">24</property>
+                <property name="spacing">24</property>
                 <child>
-                  <object class="AdwEntryRow" id="_nameEntry">
-                    <property name="title">Nombre:</property>
+                  <object class="GtkLabel">
+                    <property name="label">Articulo</property>
+                    <style>
+                      <class name="title-1"/>
+                    </style>
                   </object>
                 </child>
                 <child>
-                  <object class="AdwEntryRow" id="_cantidadEntry">
-                    <property name="title">Cantidad:</property>
+                  <object class="AdwPreferencesGroup">
+                    <child>
+                      <object class="AdwEntryRow" id="_nameEntry">
+                        <property name="title">Nombre:</property>
+                      </object>
+                    </child>
+                    <child>
+                      <object class="AdwEntryRow" id="_cantidadEntry">
+                        <property name="title">Cantidad:</property>
+                      </object>
+                    </child>
                   </object>
                 </child>
-              </object>
-            </child>
-            <child>
-              <object class="AdwPreferencesGroup">
                 <child>
-                  <object class="AdwComboRow" id="_artTypeRow">
-                    <property name="title">Tipo</property>
-                    <property name="model">
-                      <object class="GtkStringList">
-                        <items>
-                          <item>Animales</item>
-                          <item>Maquinaria</item>
-                          <item>Otro</item>
-                        </items>
+                  <object class="AdwPreferencesGroup" id="_animalesGroup">
+                    <property name="title">Animales</property>
+                    <child>
+                      <object class="AdwEntryRow" id="_especieTypeRow">
+                        <property name="title">Tipo</property>
+                      </object>
+                    </child>
+                    <child>
+                      <object class="AdwEntryRow" id="_razaTypeRow">
+                        <property name="title">Raza</property>
+                      </object>
+                    </child>
+                    <child>
+                      <object class="AdwActionRow">
+                        <property name="title">Nacimiento</property>
+                        <property name="activatable-widget">_dateCalendarButton</property>
+                        <child type="suffix">
+                          <object class="GtkMenuButton" id="_dateCalendarButton">
+                            <property name="valign">3</property>
+                            <property name="direction">4</property>
+                            <property name="label">Seleccione una fecha</property>
+                            <property name="popover">
+                              <object class="GtkPopover">
+                                <child>
+                                  <object class="GtkCalendar" id="_dateCalendar">
+                                    <property name="name">calendarNacimiento</property>
+                                  </object>
+                                </child>
+                              </object>
+                            </property>
+                          </object>
+                        </child>
+                      </object>
+                    </child>
+                  </object>
+                </child>
+                <child>
+                  <object class="AdwPreferencesGroup" id="_maquinariaGroup">
+                    <property name="title">Maquinaria</property>
+                    <property name="description">Ingrese la informacion necesaria de esta maquinaria</property>
+                    <child>
+                      <object class="AdwEntryRow" id="_typeMaqTypeRow">
+                        <property name="title">Tipo</property>
+                      </object>
+                    </child>
+                    <child>
+                      <object class="AdwEntryRow" id="_marcaTypeRow">
+                        <property name="title">Marca</property>
+                      </object>
+                    </child>
+                    <child>
+                      <object class="AdwEntryRow" id="_modeloTypeRow">
+                        <property name="title">Modelo</property>
+                      </object>
+                    </child>
+                    <child>
+                      <object class="AdwEntryRow" id="_añoEntry">
+                        <property name="title">Año</property>
+                      </object>
+                    </child>
+                  </object>
+                </child>
+                <child>
+                  <object class="AdwPreferencesGroup" id="_customPropertiesGroup">
+                    <property name="title">Propiedades personalizadas</property>
+                    <property name="header-suffix">
+                      <object class="GtkButton" id="_addNewPropertyButton">
+                        <property name="valign">3</property>
+                        <property name="tooltip-text">Añadir nueva propiedad</property>
+                        <child>
+                          <object class="AdwButtonContent">
+                            <property name="label">Añadir</property>
+                            <property name="icon-name">list-add-symbolic</property>
+                          </object>
+                        </child>
+                        <style>
+                          <class name="flat"/>
+                        </style>
                       </object>
                     </property>
                   </object>
                 </child>
-              </object>
-            </child>
-            <child>
-              <object class="AdwPreferencesGroup" id="_animalesGroup">
-                <property name="title">Animales</property>
-                <property name="visible">true</property>
                 <child>
-                  <object class="AdwEntryRow" id="_especieTypeRow">
-                    <property name="title">Tipo</property>
-                  </object>
-                </child>
-                <child>
-                  <object class="AdwEntryRow" id="_razaTypeRow">
-                    <property name="title">Raza</property>
-                  </object>
-                </child>
-                <child>
-                  <object class="AdwActionRow">
-                    <property name="title">Nacimiento</property>
-                    <property name="activatable-widget">_dateCalendarButton</property>
-                    <child type="suffix">
-                      <object class="GtkMenuButton" id="_dateCalendarButton">
-                        <property name="valign">3</property>
-                        <property name="direction">4</property>
-                        <property name="label">Seleccione una fecha</property>
-                        <property name="popover">
-                          <object class="GtkPopover">
-                            <child>
-                              <object class="GtkCalendar" id="_dateCalendar">
-                                <property name="name">calendarNacimiento</property>
-                              </object>
-                            </child>
-                          </object>
-                        </property>
-                      </object>
-                    </child>
-                  </object>
-                </child>
-              </object>
-            </child>
-            <child>
-              <object class="AdwPreferencesGroup" id="_maquinariaGroup">
-                <property name="title">Maquinaria</property>
-                <property name="visible">false</property>
-                <property name="description">Ingrese la informacion necesaria de esta maquinaria</property>
-                <child>
-                  <object class="AdwEntryRow" id="_typeMaqTypeRow">
-                    <property name="title">Tipo</property>
-                  </object>
-                </child>
-                <child>
-                  <object class="AdwEntryRow" id="_marcaTypeRow">
-                    <property name="title">Marca</property>
-                  </object>
-                </child>
-                <child>
-                  <object class="AdwEntryRow" id="_modeloTypeRow">
-                    <property name="title">Modelo</property>
-                  </object>
-                </child>
-                <child>
-                  <object class="AdwEntryRow" id="_añoEntry">
-                    <property name="title">Año</property>
-                  </object>
-                </child>
-              </object>
-            </child>
-            <child>
-              <object class="AdwPreferencesGroup" id="_customPropertiesGroup">
-                <property name="title">Propiedades personalizadas</property>
-                <property name="header-suffix">
-                  <object class="GtkButton" id="_addNewPropertyButton">
-                    <property name="valign">3</property>
-                    <property name="tooltip-text">Añadir nueva propiedad</property>
+                  <object class="AdwBin">
                     <child>
-                      <object class="AdwButtonContent">
-                        <property name="label">Añadir</property>
-                        <property name="icon-name">list-add-symbolic</property>
+                      <object class="GtkScrolledWindow">
+                        <property name="height-request">180</property>
+                        <property name="width-request">600</property>
+                        <child>
+                          <object class="GtkTextView" id="_dscTextView">
+                            <property name="bottom-margin">12</property>
+                            <property name="left-margin">12</property>
+                            <property name="right-margin">12</property>
+                            <property name="top-margin">12</property>
+                            <property name="editable">true</property>
+                            <property name="cursor-visible">true</property>
+                            <property name="wrap-mode">1</property>
+                            <property name="css-classes">flat</property>
+                          </object>
+                        </child>
                       </object>
                     </child>
                     <style>
-                      <class name="flat"/>
+                      <class name="card"/>
                     </style>
                   </object>
-                </property>
+                </child>
+                <child>
+                  <object class="GtkCenterBox">
+                    <child type="start">
+                      <object class="GtkButton" id="_deleteButton">
+                        <child>
+                          <object class="AdwButtonContent">
+                            <property name="icon-name">user-trash-symbolic</property>
+                            <property name="label">Borrar</property>
+                            <property name="valign">3</property>
+                          </object>
+                        </child>
+                        <style>
+                          <class name="destructive-action"/>
+                        </style>
+                      </object>
+                    </child>
+                    <child type="end">
+                      <object class="GtkButton" id="_saveButton">
+                        <child>
+                          <object class="AdwButtonContent">
+                            <property name="icon-name">document-save-symbolic</property>
+                            <property name="label">Guardar</property>
+                            <property name="valign">3</property>
+                          </object>
+                        </child>
+                        <style>
+                          <class name="suggested-action"/>
+                        </style>
+                      </object>
+                    </child>
+                  </object>
+                </child>
               </object>
             </child>
             <child>
-              <object class="AdwBin">
+              <object class="GtkSeparator"></object>
+            </child>
+            <child>
+              <object class="GtkBox">
+                <property name="hexpand">true</property>
+                <property name="orientation">1</property>
+                <property name="margin-bottom">24</property>
+                <property name="margin-end">24</property>
+                <property name="margin-start">24</property>
+                <property name="margin-top">24</property>
+                <property name="spacing">24</property>
+                <child>
+                  <object class="GtkLabel">
+                    <property name="label">Agregar Imagenes</property>
+                    <style>
+                      <class name="title-1"/>
+                    </style>
+                  </object>
+                </child>
                 <child>
                   <object class="GtkScrolledWindow">
-                    <property name="height-request">180</property>
-                    <property name="width-request">600</property>
+                    <property name="hexpand">true</property>
+                    <property name="vexpand">true</property>
                     <child>
-                      <object class="GtkTextView" id="_dscTextView">
-                        <property name="bottom-margin">12</property>
-                        <property name="left-margin">12</property>
-                        <property name="right-margin">12</property>
-                        <property name="top-margin">12</property>
-                        <property name="editable">true</property>
-                        <property name="cursor-visible">true</property>
-                        <property name="wrap-mode">1</property>
-                        <property name="css-classes">flat</property>
-                      </object>
-                    </child>
-                  </object>
-                </child>
-                <style>
-                  <class name="card"/>
-                </style>
-              </object>
-            </child>
-            <child>
-              <object class="GtkCenterBox">
-                <child type="start">
-                  <object class="GtkButton" id="_deleteButton">
-                    <child>
-                      <object class="AdwButtonContent">
-                        <property name="icon-name">user-trash-symbolic</property>
-                        <property name="label">Borrar</property>
-                        <property name="valign">3</property>
-                      </object>
-                    </child>
-                    <style>
-                      <class name="destructive-action"/>
-                    </style>
-                  </object>
-                </child>
-                <child type="end">
-                  <object class="GtkButton" id="_saveButton">
-                    <child>
-                      <object class="AdwButtonContent">
-                        <property name="icon-name">document-save-symbolic</property>
-                        <property name="label">Guardar</property>
-                        <property name="valign">3</property>
-                      </object>
-                    </child>
-                    <style>
-                      <class name="suggested-action"/>
-                    </style>
-                  </object>
-                </child>
-              </object>
-            </child>
-          </object>
-        </child>
-        <child>
-          <object class="GtkSeparator"></object>
-        </child>
-        <child>
-          <object class="GtkScrolledWindow">
-            <property name="hexpand">true</property>
-            <child>
-              <object class="GtkFlowBox" id="_images">
-                <property name="margin-top">12</property>
-                <property name="margin-bottom">12</property>
-                <property name="margin-start">12</property>
-                <property name="margin-end">12</property>
-                <property name="orientation">0</property>
-                <property name="row-spacing">6</property>
-                <property name="column-spacing">6</property>
-                <property name="homogeneous">true</property>
-                <property name="max-children-per-line">3</property>
-                <property name="min-children-per-line">1</property>
-                <property name="selection-mode">0</property>
-                <child>
-                  <object class="GtkFlowBoxChild">
-                    <child>
-                      <object class="GtkButton" id="_addImageButton">
-                        <style>
-                          <class name="card"/>
-                        </style>
+                      <object class="GtkFlowBox" id="_images">
+                        <property name="orientation">0</property>
+                        <property name="row-spacing">6</property>
+                        <property name="column-spacing">6</property>
+                        <property name="homogeneous">true</property>
+                        <property name="max-children-per-line">3</property>
+                        <property name="min-children-per-line">1</property>
+                        <property name="valign">1</property>
+                        <property name="selection-mode">0</property>
                         <child>
-                          <object class="GtkImage">
-                            <property name="icon-name">value-increase-symbolic</property>
-                            <property name="pixel-size">64</property>
+                          <object class="GtkFlowBoxChild">
+                            <child>
+                              <object class="GtkButton" id="_addImageButton">
+                                <style>
+                                  <class name="card"/>
+                                </style>
+                                <child>
+                                  <object class="GtkImage">
+                                    <property name="margin-top">12</property>
+                                    <property name="margin-bottom">12</property>
+                                    <property name="margin-start">12</property>
+                                    <property name="margin-end">12</property>
+                                    <property name="icon-name">insert-image-symbolic</property>
+                                    <property name="pixel-size">64</property>
+                                  </object>
+                                </child>
+                              </object>
+                            </child>
                           </object>
                         </child>
                       </object>
@@ -240,6 +255,6 @@
           </object>
         </child>
       </object>
-    </child>
+    </property>
   </object>
 </interface>

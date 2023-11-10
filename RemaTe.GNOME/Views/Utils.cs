@@ -1,10 +1,11 @@
 using System;
-using System.Text.RegularExpressions;
 
 using RemaTe.Common.Enums;
 using RemaTe.Shared.Controllers;
 
 partial class Utils {
+    public static readonly DateTime Epoch = new(1970, 1, 1, 0, 0, 0, DateTimeKind.Utc);
+
     public static bool IsValidEmail(string email) {
         // // Check if the string is null or empty
         // if (string.IsNullOrEmpty(email)) return false;

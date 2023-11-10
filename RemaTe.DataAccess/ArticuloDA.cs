@@ -161,6 +161,32 @@ public class MaquinariaDA : Util<MaquinariaVO> {
         }
     }
 
+    public static async IAsyncEnumerable<MaquinariaVO> ReadNotLoted() {
+        var cmd = DBC.I.DbConn.CreateCommand();
+
+        cmd.CommandText = """
+            SELECT a.id, a.nombre, a.cantidad, m.marca, m.modelo, m.año, a.descripcion
+            FROM maquinaria m
+            INNER JOIN articulo a ON a.id=m.id_articulo
+            LEFT JOIN pertenece i ON i.id_articulo=m.id_articulo
+            WHERE i.id_articulo IS NULL;
+        """;
+        var reader = await cmd.ExecuteReaderAsync();
+
+        while (reader.Read()) {
+            yield return new MaquinariaVO() {
+                id = reader.GetInt32(0),
+                id_articulo = reader.GetInt32(0),
+                nombre = reader.GetString(1),
+                cantidad = reader.GetInt32(2),
+                marca = reader.GetString(3),
+                modelo = reader.GetString(4),
+                año = reader.GetInt32(5),
+                descripcion = reader.GetString(6),
+            };
+        }
+    }
+
     public static async Task<(Errors e, MaquinariaVO maquinaria)> Read(int id) {
         var cmd = DBC.I.DbConn.CreateCommand();
 
@@ -195,19 +221,25 @@ public class MaquinariaDA : Util<MaquinariaVO> {
 
         var sb = new StringBuilder();
         sb.AppendLine("UPDATE maquinaria SET ");
-        if (maquinaria.marca != null) sb.AppendLine("marca=$marca");
-        if (maquinaria.modelo != null) sb.AppendLine("modelo=$modelo");
+        if (maquinaria.marca != null) sb.AppendLine("marca=$marca, ");
+        if (maquinaria.modelo != null) sb.AppendLine("modelo=$modelo, ");
         if (maquinaria.año != null) sb.AppendLine("año=$año");
         sb.AppendLine("WHERE id_articulo = $id;");
 
         sb.AppendLine("UPDATE articulo SET ");
-        if (maquinaria.nombre != null) sb.AppendLine("nombre=$nombre");
-        if (maquinaria.cantidad != null) sb.AppendLine("cantidad=$cantidad");
+        if (maquinaria.nombre != null) sb.AppendLine("nombre=$nombre, ");
+        if (maquinaria.cantidad != null) sb.AppendLine("cantidad=$cantidad, ");
         if (maquinaria.descripcion != null) sb.AppendLine("descripcion=$descripcion");
-        sb.AppendLine("WHERE id_ = $id;");
+        sb.AppendLine("WHERE id = $id;");
 
         cmd.CommandText = sb.ToString();
-        cmd.Parameters.AddWithValue("id", maquinaria.id);
+        cmd.Parameters.AddWithValue("$id", maquinaria.id);
+        if (maquinaria.marca != null) cmd.Parameters.AddWithValue("$marca", maquinaria.marca);
+        if (maquinaria.modelo != null) cmd.Parameters.AddWithValue("$modelo", maquinaria.modelo);
+        if (maquinaria.año != null) cmd.Parameters.AddWithValue("$año", maquinaria.año);
+        if (maquinaria.nombre != null) cmd.Parameters.AddWithValue("$nombre", maquinaria.nombre);
+        if (maquinaria.cantidad != null) cmd.Parameters.AddWithValue("$cantidad", maquinaria.cantidad);
+        if (maquinaria.descripcion != null) cmd.Parameters.AddWithValue("$descripcion", maquinaria.descripcion);
         var affected = await cmd.ExecuteNonQueryAsync();
 
         return affected > 0 ? Errors.Ok : Errors.NotFound;
@@ -280,7 +312,33 @@ public class AnimalDA : Util<AnimalVO> {
                 cantidad = reader.GetInt32(2),
                 tipo = reader.GetString(3),
                 raza = reader.GetString(4),
-                nacimiento = reader.GetInt32(5),
+                nacimiento = reader.GetDateTime(5),
+                descripcion = reader.GetString(6),
+            };
+        }
+    }
+
+    public static async IAsyncEnumerable<AnimalVO> ReadNotLoted() {
+        var cmd = DBC.I.DbConn.CreateCommand();
+
+        cmd.CommandText = """
+            SELECT a.id, a.nombre, a.cantidad, m.tipo, m.raza, m.nacimiento, a.descripcion
+            FROM animal m
+            INNER JOIN articulo a ON a.id=m.id_articulo
+            LEFT JOIN pertenece p ON p.id_articulo=m.id_articulo
+            WHERE p.id_articulo IS NULL;
+        """;
+        var reader = await cmd.ExecuteReaderAsync();
+
+        while (reader.Read()) {
+            yield return new AnimalVO() {
+                id = reader.GetInt32(0),
+                id_articulo = reader.GetInt32(0),
+                nombre = reader.GetString(1),
+                cantidad = reader.GetInt32(2),
+                tipo = reader.GetString(3),
+                raza = reader.GetString(4),
+                nacimiento = reader.GetDateTime(5),
                 descripcion = reader.GetString(6),
             };
         }
@@ -306,7 +364,7 @@ public class AnimalDA : Util<AnimalVO> {
                 cantidad = reader.GetInt32(2),
                 tipo = reader.GetString(3),
                 raza = reader.GetString(4),
-                nacimiento = reader.GetInt32(5),
+                nacimiento = reader.GetDateTime(5),
                 descripcion = reader.GetString(6),
             });
         }
@@ -391,6 +449,29 @@ public class OtroDA : Util<OtroVO> {
             SELECT a.id, a.nombre, a.cantidad, a.descripcion
             FROM otro m
             INNER JOIN articulo a ON a.id=m.id_articulo;
+        """;
+        var reader = await cmd.ExecuteReaderAsync();
+
+        while (reader.Read()) {
+            yield return new OtroVO() {
+                id = reader.GetInt32(0),
+                id_articulo = reader.GetInt32(0),
+                nombre = reader.GetString(1),
+                cantidad = reader.GetInt32(2),
+                descripcion = reader.GetString(3),
+            };
+        }
+    }
+
+    public static async IAsyncEnumerable<OtroVO> ReadNotLoted() {
+        var cmd = DBC.I.DbConn.CreateCommand();
+
+        cmd.CommandText = """
+            SELECT a.id, a.nombre, a.cantidad, a.descripcion
+            FROM otro m
+            INNER JOIN articulo a ON a.id=m.id_articulo
+            LEFT JOIN pertenece i ON i.id_articulo=m.id_articulo
+            WHERE i.id_articulo IS NULL;
         """;
         var reader = await cmd.ExecuteReaderAsync();
 

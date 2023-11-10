@@ -1,7 +1,6 @@
 using System;
 using System.Diagnostics;
 
-using RemaTe.Common.Models;
 using RemaTe.GNOME.Helpers;
 using RemaTe.GNOME.Views.Widgets;
 using RemaTe.Logic;
@@ -14,12 +13,14 @@ public partial class MainWindow : Adw.ApplicationWindow {
 
 #pragma warning disable 649
     [Gtk.Connect] private readonly Adw.WindowTitle _windowTitle;
+    [Gtk.Connect] private readonly Gtk.Box _actionsBox;
     [Gtk.Connect] private readonly Gtk.Button _loginButton;
     [Gtk.Connect] private readonly Gtk.Button _logoutButton;
     [Gtk.Connect] private readonly Adw.Bin _content;
     [Gtk.Connect] private readonly Gtk.Button _lstArtButton;
     [Gtk.Connect] private readonly Gtk.Button _lstLteButton;
-    [Gtk.Connect] private readonly Gtk.Button _lstRmteButton;
+    [Gtk.Connect] private readonly Gtk.Button _lstFtrRmteButton;
+    [Gtk.Connect] private readonly Gtk.Button _lstPstRmteButton;
     [Gtk.Connect] private readonly Gtk.Button _lstUrsButton;
     [Gtk.Connect] private readonly Gtk.Button _crtAniButton;
     [Gtk.Connect] private readonly Gtk.Button _crtMaqButton;
@@ -82,12 +83,13 @@ public partial class MainWindow : Adw.ApplicationWindow {
                 _loginButton.SetVisible(false);
                 _logoutButton.SetVisible(true);
 
+                _actionsBox.SetVisible(true);
                 // _crtArtButton.SetVisible(true);
-                _crtUsrButton.SetVisible(true);
-                _crtLteButton.SetVisible(true);
-                _crtRmteButton.SetVisible(true);
-
-                _lstUrsButton.SetVisible(true);
+                // _crtUsrButton.SetVisible(true);
+                // _crtLteButton.SetVisible(true);
+                // _crtRmteButton.SetVisible(true);
+                // 
+                // _lstUrsButton.SetVisible(true);
 
                 _content.SetChild(GreetingFrame.New());
             }
@@ -95,29 +97,33 @@ public partial class MainWindow : Adw.ApplicationWindow {
                 _loginButton.SetVisible(true);
                 _logoutButton.SetVisible(false);
 
+                _actionsBox.SetVisible(false);
                 // _crtArtButton.SetVisible(false);
-                _crtUsrButton.SetVisible(false);
-                _crtLteButton.SetVisible(false);
-                _crtRmteButton.SetVisible(false);
-
-                _lstUrsButton.SetVisible(false);
+                // _crtUsrButton.SetVisible(false);
+                // _crtLteButton.SetVisible(false);
+                // _crtRmteButton.SetVisible(false);
+                // 
+                // _lstUrsButton.SetVisible(false);
 
                 _content.SetChild(GreetingFrame.New());
             }
         };
 
+        _actionsBox.SetVisible(false);
+
         // _crtArtButton.SetVisible(false);
-        _crtLteButton.SetVisible(false);
-        _crtRmteButton.SetVisible(false);
-        _lstUrsButton.SetVisible(false);
-        _crtUsrButton.SetVisible(false);
+        // _crtLteButton.SetVisible(false);
+        // _crtRmteButton.SetVisible(false);
+        // _lstUrsButton.SetVisible(false);
+        // _crtUsrButton.SetVisible(false);
 
         _loginButton.OnClicked += LoginDialog.LogIn;
         _logoutButton.OnClicked += LoginDialog.LogOut;
 
         _lstArtButton.OnClicked += async (sender, e) => await Frame.ShowArticulosAsync(this, _content);
         _lstLteButton.OnClicked += async (sender, e) => await Frame.ShowLotesAsync(this, _content);
-        _lstRmteButton.OnClicked += async (sender, e) => await Frame.ShowRemateAsync(this, _content);
+        _lstFtrRmteButton.OnClicked += async (sender, e) => await Frame.ShowFutureRemateAsync(this, _content);
+        _lstPstRmteButton.OnClicked += async (sender, e) => await Frame.ShowPastRemateAsync(this, _content);
         _lstUrsButton.OnClicked += async (sender, e) => await Frame.ShowUsersAsync(this, _content);
 
         _crtAniButton.OnClicked += (sender, e) => Frame.CreateAnimalAsync(this, _content);

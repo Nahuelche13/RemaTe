@@ -37,6 +37,11 @@ public class Maquinaria {
             ? (Errors.Ok, MaquinariaDA.ReadAll())
             : (Errors.Unauthorized, null);
     }
+    public static (Errors error, IAsyncEnumerable<MaquinariaVO> values) ReadNotLoted() {
+        return Usuario.I.Auth != null && Usuario.I.Auth.permisos > (byte)Permissions.Vendedor
+            ? (Errors.Ok, MaquinariaDA.ReadNotLoted())
+            : (Errors.Unauthorized, null);
+    }
     public static async Task<Errors> Update(MaquinariaVO maquinaria) {
         return Usuario.I.Auth != null && Usuario.I.Auth.permisos > (byte)Permissions.Vendedor
             ? await MaquinariaDA.Update(maquinaria)
@@ -60,6 +65,11 @@ public class Animal {
             ? (Errors.Ok, AnimalDA.ReadAll())
             : (Errors.Unauthorized, null);
     }
+    public static (Errors error, IAsyncEnumerable<AnimalVO> values) ReadNotLoted() {
+        return Usuario.I.Auth != null && Usuario.I.Auth.permisos > (byte)Permissions.Vendedor
+            ? (Errors.Ok, AnimalDA.ReadNotLoted())
+            : (Errors.Unauthorized, null);
+    }
     public static async Task<Errors> Update(AnimalVO animal) {
         return Usuario.I.Auth != null && Usuario.I.Auth.permisos > (byte)Permissions.Vendedor
             ? await AnimalDA.Update(animal)
@@ -81,6 +91,11 @@ public class Otro {
     public static (Errors error, IAsyncEnumerable<OtroVO> values) ReadAll() {
         return Usuario.I.Auth != null && Usuario.I.Auth.permisos > (byte)Permissions.Vendedor
             ? (Errors.Ok, OtroDA.ReadAll())
+            : (Errors.Unauthorized, null);
+    }
+    public static (Errors error, IAsyncEnumerable<OtroVO> values) ReadNotLoted() {
+        return Usuario.I.Auth != null && Usuario.I.Auth.permisos > (byte)Permissions.Vendedor
+            ? (Errors.Ok, OtroDA.ReadNotLoted())
             : (Errors.Unauthorized, null);
     }
     public static async Task<Errors> Update(OtroVO otro) {

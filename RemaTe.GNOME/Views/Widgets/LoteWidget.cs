@@ -12,12 +12,10 @@ class LoteWidget : Adw.Bin {
     [Gtk.Connect] private readonly Adw.ActionRow _comision;
     [Gtk.Connect] private readonly Gtk.Button _moreInfo;
     [Gtk.Connect] private readonly Gtk.Button _edit;
-    [Gtk.Connect] private readonly Gtk.Box _carouselBox;
     [Gtk.Connect] private readonly Adw.Carousel _carousel;
-    [Gtk.Connect] private readonly Adw.CarouselIndicatorDots _carouselIndicatorDots;
 #pragma warning restore 649
 
-    public LoteWidget(LoteRep lote, Gtk.Window? parent, bool canEdit, GObject.SignalHandler<Gtk.Button> onClicked = null)
+    public LoteWidget(LoteRep lote, Gtk.Window? parent, bool canEdit = false, GObject.SignalHandler<Gtk.Button> onClicked = null)
          : this(Builder.FromFile("lote_widget.ui"), lote, parent, canEdit, onClicked) { }
     private LoteWidget(Gtk.Builder builder, LoteRep lote, Gtk.Window? parent, bool canEdit, GObject.SignalHandler<Gtk.Button> onClicked) : base(builder.GetPointer("_root"), false) {
         builder.Connect(this);

@@ -2,15 +2,30 @@
 <interface>
   <requires lib="gtk" version="4.0"/>
   <object class="AdwWindow" id="_root">
+    <property name="content">
+      <object class="GtkBox">
+        <property name="orientation">1</property>
+        <child>
+          <object class="AdwHeaderBar">
+            <property name="title-widget">
+              <object class="AdwWindowTitle">
+                <property name="title">Remates</property>
+              </object>
+            </property>
+          </object>
+        </child>
         <child>
           <object class="GtkBox">
+            <property name="orientation">0</property>
             <child>
               <object class="GtkBox">
+                <property name="hexpand">false</property>
+                <property name="vexpand">false</property>
+                <property name="orientation">1</property>
                 <property name="margin-bottom">24</property>
                 <property name="margin-end">24</property>
                 <property name="margin-start">24</property>
                 <property name="margin-top">24</property>
-                <property name="orientation">1</property>
                 <property name="spacing">24</property>
                 <child>
                   <object class="GtkLabel">
@@ -21,107 +36,159 @@
                   </object>
                 </child>
                 <child>
-                  <object class="GtkLabel">
-                    <property name="label" translatable="true">Día de Inicio</property>
-                    <style>
-                      <class name="title-4"/>
-                    </style>
-                  </object>
-                </child>
-                <child>
-                  <object class="GtkCalendar" id="_calendar">
-                    <property name="show-heading">true</property>
-                    <property name="show-day-names">true</property>
-                    <property name="show-week-numbers">false</property>
+                  <object class="AdwEntryRow" id="_nombre">
+                    <property name="title">Nombre</property>
                     <style>
                       <class name="card"/>
                     </style>
                   </object>
                 </child>
                 <child>
-                  <object class="GtkLabel">
-                    <property name="label" translatable="true">Duracion</property>
+                  <object class="AdwEntryRow" id="_rematador">
+                    <property name="title">Rematador</property>
                     <style>
-                      <class name="title-4"/>
+                      <class name="card"/>
                     </style>
                   </object>
                 </child>
                 <child>
-                  <object class="GtkBox">
-                    <property name="halign">3</property>
-                    <property name="spacing">6</property>
+                  <object class="AdwPreferencesGroup">
+                    <property name="title">Inicio</property>
+                    <property name="description">Ingrese fecha y hora de inicio del remate</property>
                     <child>
-                      <object class="GtkSpinButton" id="_hours">
-                        <property name="halign">3</property>
-                        <property name="orientation">1</property>
-                        <property name="wrap">true</property>
-                        <property name="value">0</property>
-                        <property name="climb-rate">1</property>
-                        <property name="adjustment">
-                          <object class="GtkAdjustment">
-                            <property name="lower">0</property>
-                            <property name="upper">23</property>
-                            <property name="step-increment">1</property>
-                            <property name="value">0</property>
+                      <object class="AdwActionRow">
+                        <property name="title">Dia</property>
+                        <property name="activatable-widget">_calendarButton</property>
+                        <child type="suffix">
+                          <object class="GtkMenuButton" id="_calendarButton">
+                            <property name="valign">3</property>
+                            <property name="direction">4</property>
+                            <property name="label">Seleccione una fecha</property>
+                            <property name="popover">
+                              <object class="GtkPopover">
+                                <child>
+                                  <object class="GtkCalendar" id="_calendar">
+                                    <property name="name">calendarNacimiento</property>
+                                  </object>
+                                </child>
+                              </object>
+                            </property>
                           </object>
-                        </property>
+                        </child>
                       </object>
                     </child>
                     <child>
-                      <object class="GtkLabel">
-                        <property name="label">:</property>
-                      </object>
-                    </child>
-                    <child>
-                      <object class="GtkSpinButton" id="_minutes">
-                        <property name="halign">3</property>
-                        <property name="orientation">1</property>
-                        <property name="wrap">true</property>
-                        <property name="climb-rate">1</property>
-                        <property name="adjustment">
-                          <object class="GtkAdjustment">
-                            <property name="lower">0</property>
-                            <property name="upper">59</property>
-                            <property name="step-increment">1</property>
+                      <object class="AdwActionRow">
+                        <property name="title">Horas</property>
+                        <child>
+                          <object class="GtkSpinButton" id="_horaEntry">
+                            <property name="wrap">true</property>
                             <property name="value">0</property>
+                            <property name="climb-rate">1</property>
+                            <property name="adjustment">
+                              <object class="GtkAdjustment">
+                                <property name="lower">0</property>
+                                <property name="upper">23</property>
+                                <property name="step-increment">1</property>
+                                <property name="value">0</property>
+                              </object>
+                            </property>
+                            <style>
+                              <class name="flat"/>
+                            </style>
                           </object>
-                        </property>
+                        </child>
+                      </object>
+                    </child>
+                    <child>
+                      <object class="AdwActionRow">
+                        <property name="title">Minutos</property>
+                        <child>
+                          <object class="GtkSpinButton" id="_minutoEntry">
+                            <property name="wrap">true</property>
+                            <property name="value">0</property>
+                            <property name="climb-rate">1</property>
+                            <property name="adjustment">
+                              <object class="GtkAdjustment">
+                                <property name="lower">0</property>
+                                <property name="upper">59</property>
+                                <property name="step-increment">1</property>
+                                <property name="value">0</property>
+                              </object>
+                            </property>
+                            <style>
+                              <class name="flat"/>
+                            </style>
+                          </object>
+                        </child>
                       </object>
                     </child>
                   </object>
                 </child>
                 <child>
-                  <object class="GtkLabel">
-                    <property name="label">Métodos de pago </property>
-                    <style>
-                      <class name="title-4"/>
-                    </style>
-                  </object>
-                </child>
-                <child>
-                  <object class="GtkCheckButton" id="_checkbox_1">
-                    <property name="label">Efectivo</property>
-                  </object>
-                </child>
-                <child>
-                  <object class="GtkCheckButton" id="_checkbox_2">
-                    <property name="label">Crédito</property>
-                  </object>
-                </child>
-                <child>
-                  <object class="GtkCheckButton" id="_checkbox_3">
-                    <property name="label">Débito</property>
-                  </object>
-                </child>
-                <child>
-                  <object class="GtkButton">
+                  <object class="AdwPreferencesGroup">
+                    <property name="title">Duración</property>
+                    <property name="description">Ingrese la duración del remate</property>
                     <child>
-                      <object class="AdwButtonContent">
-                        <property name="icon-name">image-print-symbolic</property>
-                        <property name="label">Selecionar lotes</property>
+                      <object class="AdwActionRow">
+                        <property name="title">Horas</property>
+                        <child>
+                          <object class="GtkSpinButton" id="_horasEntry">
+                            <property name="wrap">true</property>
+                            <property name="value">0</property>
+                            <property name="climb-rate">1</property>
+                            <property name="adjustment">
+                              <object class="GtkAdjustment">
+                                <property name="lower">0</property>
+                                <property name="upper">23</property>
+                                <property name="step-increment">1</property>
+                                <property name="value">0</property>
+                              </object>
+                            </property>
+                            <style>
+                              <class name="flat"/>
+                            </style>
+                          </object>
+                        </child>
+                      </object>
+                    </child>
+                    <child>
+                      <object class="AdwActionRow">
+                        <property name="title">Minutos</property>
+                        <child>
+                          <object class="GtkSpinButton" id="_minutosEntry">
+                            <property name="wrap">true</property>
+                            <property name="value">0</property>
+                            <property name="climb-rate">1</property>
+                            <property name="adjustment">
+                              <object class="GtkAdjustment">
+                                <property name="lower">0</property>
+                                <property name="upper">59</property>
+                                <property name="step-increment">1</property>
+                                <property name="value">0</property>
+                              </object>
+                            </property>
+                            <style>
+                              <class name="flat"/>
+                            </style>
+                          </object>
+                        </child>
+                      </object>
+                    </child>
+                  </object>
+                </child>
+                <child>
+                  <object class="AdwActionRow">
+                    <property name="title">Acepta Tarjeta</property>
+                    <child>
+                      <object class="GtkSwitch" id="_switch">
                         <property name="valign">3</property>
+                        <property name="halign">3</property>
                       </object>
                     </child>
+                    <style>
+                      <class name="card"/>
+                    </style>
                   </object>
                 </child>
                 <child>
@@ -158,7 +225,67 @@
                 </child>
               </object>
             </child>
+            <child>
+              <object class="GtkSeparator">
+                <property name="vexpand">true</property>
+              </object>
+            </child>
+            <child>
+              <object class="GtkBox">
+                <property name="hexpand">true</property>
+                <property name="orientation">1</property>
+                <property name="margin-bottom">24</property>
+                <property name="margin-end">24</property>
+                <property name="margin-start">24</property>
+                <property name="margin-top">24</property>
+                <property name="spacing">24</property>
+                <child>
+                  <object class="GtkLabel">
+                    <property name="label">Añadir Lotes</property>
+                    <style>
+                      <class name="title-1"/>
+                    </style>
+                  </object>
+                </child>
+                <child>
+                  <object class="GtkFlowBox" id="_lotes">
+                    <property name="vexpand">true</property>
+                    <property name="margin-top">12</property>
+                    <property name="margin-bottom">12</property>
+                    <property name="margin-start">12</property>
+                    <property name="margin-end">12</property>
+                    <property name="orientation">0</property>
+                    <property name="row-spacing">6</property>
+                    <property name="column-spacing">6</property>
+                    <property name="homogeneous">true</property>
+                    <property name="selection-mode">0</property>
+                    <child>
+                      <object class="GtkFlowBoxChild">
+                        <child>
+                          <object class="GtkButton" id="_addLoteButton">
+                            <property name="width-request">98</property>
+                            <property name="height-request">128</property>
+                            <property name="valign">1</property>
+                            <style>
+                              <class name="card"/>
+                            </style>
+                            <child>
+                              <object class="GtkImage">
+                                <property name="icon-name">value-increase-symbolic</property>
+                                <property name="pixel-size">64</property>
+                              </object>
+                            </child>
+                          </object>
+                        </child>
+                      </object>
+                    </child>
+                  </object>
+                </child>
+              </object>
+            </child>
           </object>
         </child>
       </object>
+    </property>
+  </object>
 </interface>

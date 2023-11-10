@@ -49,29 +49,24 @@ public class LoteDialog : Adw.Window {
         _comisionEntry.OnNotify += OnEntryNotify;
 
         _applyButton.OnClicked += async (sender, e) => {
+            if (string.IsNullOrEmpty(_idEntry.GetText()) ||
+                !Utils.IsNumber(_minEntry.GetText()) ||
+                !Utils.IsNumber(_comisionEntry.GetText())) {
+                return;
+            }
+            LoteVO inputLte = new() {
+                id = null,
+                nombre = _idEntry.GetText(),
+                precio_base = int.Parse(_minEntry.GetText()),
+                comision = int.Parse(_comisionEntry.GetText())
+            };
             if (lote != null) {
-                LoteVO inputLte = new(
-                    id: lote.id,
-                    nombre: _idEntry.GetText(),
-                    precio_base: int.Parse(_minEntry.GetText()),
-                    comision: int.Parse(_comisionEntry.GetText())
-                );
-
+                inputLte.id = lote.id;
                 Errors err = await Lote.Update(inputLte);
                 Utils.ShowCommonErrorDialog(parent, err);
             }
             else {
-                if (string.IsNullOrEmpty(_idEntry.GetText()) ||
-                    string.IsNullOrEmpty(_minEntry.GetText()) ||
-                    string.IsNullOrEmpty(_comisionEntry.GetText())) {
-                    return;
-                }
-                LoteVO inputLte = new() {
-                    id = null,
-                    nombre = _idEntry.GetText(),
-                    precio_base = int.Parse(_minEntry.GetText()),
-                    comision = int.Parse(_comisionEntry.GetText())
-                };
+                inputLte.id = null;
 
                 var (err, id) = await Lote.Create(inputLte);
                 if (err != Errors.Ok) {
@@ -132,9 +127,9 @@ public class LoteDialog : Adw.Window {
         }
     }
     private void Validate() {
-        if (string.IsNullOrEmpty(_idEntry.GetText())
-        || string.IsNullOrEmpty(_minEntry.GetText())
-        || string.IsNullOrEmpty(_comisionEntry.GetText())
+        if (string.IsNullOrEmpty(_idEntry.GetText()) ||
+            !Utils.IsNumber(_minEntry.GetText()) ||
+            !Utils.IsNumber(_comisionEntry.GetText())
         ) {
             _applyButton.SetSensitive(false);
         }

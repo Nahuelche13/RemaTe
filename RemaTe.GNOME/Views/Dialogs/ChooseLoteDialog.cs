@@ -12,17 +12,17 @@ using RemaTe.Logic;
 
 namespace RemaTe.GNOME.Views;
 
-public class ChooseArticuloDialog : Adw.Window {
+public class ChooseLoteDialog : Adw.Window {
 #pragma warning disable 649
     [Gtk.Connect] private readonly Gtk.FlowBox _flowbox;
     [Gtk.Connect] private readonly Gtk.Button _cancelButton;
     [Gtk.Connect] private readonly Gtk.Button _saveButton;
 #pragma warning restore 649
 
-    readonly List<ArticuloVO> articulos = new();
+    readonly List<LoteVO> articulos = new();
 
-    public ChooseArticuloDialog(Gtk.Window parent, TaskCompletionSource<List<ArticuloVO>?> tcs) : this(Builder.FromFile("choose_articulo_dialog.ui"), parent, tcs) { }
-    private ChooseArticuloDialog(Gtk.Builder builder, Gtk.Window parent, TaskCompletionSource<List<ArticuloVO>?> tcs) : base(builder.GetPointer("_root"), false) {
+    public ChooseLoteDialog(Gtk.Window parent, TaskCompletionSource<List<LoteVO>?> tcs) : this(Builder.FromFile("choose_articulo_dialog.ui"), parent, tcs) { }
+    private ChooseLoteDialog(Gtk.Builder builder, Gtk.Window parent, TaskCompletionSource<List<LoteVO>?> tcs) : base(builder.GetPointer("_root"), false) {
         builder.Connect(this);
 
         //Dialog Settings
@@ -48,30 +48,10 @@ public class ChooseArticuloDialog : Adw.Window {
         OnCloseRequest += (sender, e) => false;
     }
 
-    async void FillFlowBox(TaskCompletionSource<List<ArticuloVO>> tcs) {
-        var (_, animales) = Animal.ReadNotLoted();
-        var (_, maquinarias) = Maquinaria.ReadNotLoted();
-        var (_, otros) = Otro.ReadNotLoted();
+    async void FillFlowBox(TaskCompletionSource<List<LoteVO>> tcs) {
+        var (_, lotes) = Lote.ReadAllWithArticuloNotLoted();
 
-        await foreach (var item in animales) {
-            var child = Gtk.FlowBoxChild.New();
-            var button = Gtk.Label.New(item.nombre);
-            button.AddCssClass("card");
-            button.AddCssClass("title-1");
-            child.SetChild(button);
-            _flowbox.Append(child);
-            articulos.Add(item);
-        }
-        await foreach (var item in maquinarias) {
-            var child = Gtk.FlowBoxChild.New();
-            var button = Gtk.Label.New(item.nombre);
-            button.AddCssClass("card");
-            button.AddCssClass("title-1");
-            child.SetChild(button);
-            _flowbox.Append(child);
-            articulos.Add(item);
-        }
-        await foreach (var item in otros) {
+        await foreach (var item in lotes) {
             var child = Gtk.FlowBoxChild.New();
             var button = Gtk.Label.New(item.nombre);
             button.AddCssClass("card");

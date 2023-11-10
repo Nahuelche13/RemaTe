@@ -1,10 +1,5 @@
-using System.Threading.Tasks;
-
-using RemaTe.Common.Enums;
 using RemaTe.Common.Models;
 using RemaTe.GNOME.Helpers;
-using RemaTe.Logic;
-using RemaTe.Shared.Controllers;
 using RemaTe.Shared.Models;
 
 namespace RemaTe.GNOME.Views.Widgets;

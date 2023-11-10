@@ -2,189 +2,211 @@
 <interface>
   <requires lib="gtk" version="4.0"/>
   <object class="AdwWindow" id="_root">
-    <child>
-  <object class="GtkBox">
-    <property name="margin-bottom">24</property>
-    <property name="margin-end">24</property>
-    <property name="margin-start">24</property>
-    <property name="margin-top">24</property>
-    <property name="orientation">1</property>
-    <property name="spacing">24</property>
-    <child>
-      <object class="AdwEntryRow" id="ciEntry">
-        <property name="input-purpose">7</property>
-        <property name="title">CI:</property>
-        <style>
-          <class name="card"/>
-        </style>
-      </object>
-    </child>
-    <child>
-      <object class="AdwPasswordEntryRow" id="pwdEntry">
-        <property name="input-purpose">8</property>
-        <property name="title">_Contraseña:</property>
-        <property name="use-underline">true</property>
-        <style>
-          <class name="card"/>
-        </style>
-      </object>
-    </child>
-    <child>
-      <object class="GtkBox">
-        <property name="homogeneous">true</property>
-        <property name="spacing">24</property>
-        <property name="valign">3</property>
-        <child>
-          <object class="AdwEntryRow" id="nameEntry">
-            <property name="input-purpose">7</property>
-            <property name="title">Nombre</property>
-            <property name="valign">3</property>
-            <style>
-              <class name="card"/>
-            </style>
-          </object>
-        </child>
-        <child>
-          <object class="AdwEntryRow" id="apellidoEntry">
-            <property name="title">Apellido</property>
-            <property name="valign">3</property>
-            <style>
-              <class name="card"/>
-            </style>
-          </object>
-        </child>
-      </object>
-    </child>
-    <child>
-      <object class="AdwEntryRow" id="emailClienteEntry">
-        <property name="input-purpose">6</property>
-        <property name="title">e-mail</property>
-        <property name="valign">3</property>
-        <style>
-          <class name="card"/>
-        </style>
-      </object>
-    </child>
-    <child>
-      <object class="AdwEntryRow" id="telEntry">
-        <property name="input-purpose">3</property>
-        <property name="title">telefono</property>
-        <property name="valign">3</property>
-        <style>
-          <class name="card"/>
-        </style>
-      </object>
-    </child>
-    <child>
-      <object class="GtkBox">
-        <property name="homogeneous">true</property>
-        <property name="spacing">24</property>
-        <child>
-          <object class="GtkDropDown" id="dptoCombo">
-            <property name="model">
-              <object class="GtkStringList">
-                <items>
-                  <item>Treinta y tres</item>
-                  <item>Tacuarembo</item>
-                  <item>Soriano</item>
-                  <item>San Jose</item>
-                  <item>Rocha</item>
-                  <item>Rivera</item>
-                  <item>Rio Negro</item>
-                  <item>Paysandu</item>
-                  <item>Montevideo</item>
-                  <item>Maldonado</item>
-                  <item>Lavalleja</item>
-                  <item>Florida</item>
-                  <item>Flores</item>
-                  <item>Durazno</item>
-                  <item>Colonia</item>
-                  <item>Cerro</item>
-                  <item>Canelones</item>
-                  <item>Artigas</item>
-                  <item>Salto</item>
-                </items>
+    <property name="content">
+      <object class="AdwToolbarView">
+        <child type="top">
+          <object class="AdwHeaderBar">
+            <property name="title-widget">
+              <object class="AdwWindowTitle">
+                <property name="title">Usuarios</property>
               </object>
             </property>
           </object>
         </child>
-        <child>
-          <object class="AdwEntryRow" id="locEntry">
-            <property name="input-purpose">3</property>
-            <property name="title">localidad</property>
-            <property name="valign">3</property>
-            <style>
-              <class name="card"/>
-            </style>
-          </object>
-        </child>
-      </object>
-    </child>
-    <child>
-      <object class="GtkBox">
-        <property name="homogeneous">true</property>
-        <property name="spacing">24</property>
-        <child>
-          <object class="AdwEntryRow" id="calleEntry">
-            <property name="input-purpose">3</property>
-            <property name="title">calle</property>
-            <property name="valign">3</property>
-            <style>
-              <class name="card"/>
-            </style>
-          </object>
-        </child>
-        <child>
-          <object class="AdwEntryRow" id="puertaEntry">
-            <property name="input-purpose">3</property>
-            <property name="title">puerta</property>
-            <property name="valign">3</property>
-            <style>
-              <class name="card"/>
-            </style>
-          </object>
-        </child>
-      </object>
-    </child>
-    <child>
-      <object class="GtkDropDown" id="typeCombo">
-        <property name="model">
-          <object class="GtkStringList">
-            <items>
-              <item>Cliente</item>
-              <item>Vendedor</item>
-              <item>Empleado</item>
-              <item>Administrador</item>
-            </items>
+        <property name="content">
+          <object class="GtkBox">
+            <property name="margin-bottom">24</property>
+            <property name="margin-end">24</property>
+            <property name="margin-start">24</property>
+            <property name="margin-top">24</property>
+            <property name="orientation">1</property>
+            <property name="spacing">24</property>
+            <child>
+              <object class="AdwEntryRow" id="ciEntry">
+                <property name="input-purpose">7</property>
+                <property name="title">CI:</property>
+                <style>
+                  <class name="card"/>
+                </style>
+              </object>
+            </child>
+            <child>
+              <object class="AdwPasswordEntryRow" id="pwdEntry">
+                <property name="input-purpose">8</property>
+                <property name="title">_Contraseña:</property>
+                <property name="use-underline">true</property>
+                <style>
+                  <class name="card"/>
+                </style>
+              </object>
+            </child>
+            <child>
+              <object class="GtkBox">
+                <property name="homogeneous">true</property>
+                <property name="spacing">24</property>
+                <property name="valign">3</property>
+                <child>
+                  <object class="AdwEntryRow" id="nameEntry">
+                    <property name="input-purpose">7</property>
+                    <property name="title">Nombre</property>
+                    <property name="valign">3</property>
+                    <style>
+                      <class name="card"/>
+                    </style>
+                  </object>
+                </child>
+                <child>
+                  <object class="AdwEntryRow" id="apellidoEntry">
+                    <property name="title">Apellido</property>
+                    <property name="valign">3</property>
+                    <style>
+                      <class name="card"/>
+                    </style>
+                  </object>
+                </child>
+              </object>
+            </child>
+            <child>
+              <object class="AdwEntryRow" id="emailClienteEntry">
+                <property name="input-purpose">6</property>
+                <property name="title">e-mail</property>
+                <property name="valign">3</property>
+                <style>
+                  <class name="card"/>
+                </style>
+              </object>
+            </child>
+            <child>
+              <object class="AdwEntryRow" id="telEntry">
+                <property name="input-purpose">3</property>
+                <property name="title">telefono</property>
+                <property name="valign">3</property>
+                <style>
+                  <class name="card"/>
+                </style>
+              </object>
+            </child>
+            <child>
+              <object class="GtkBox">
+                <property name="homogeneous">true</property>
+                <property name="spacing">24</property>
+                <child>
+                  <object class="GtkDropDown" id="dptoCombo">
+                    <property name="model">
+                      <object class="GtkStringList">
+                        <items>
+                          <item>Treinta y tres</item>
+                          <item>Tacuarembo</item>
+                          <item>Soriano</item>
+                          <item>San Jose</item>
+                          <item>Rocha</item>
+                          <item>Rivera</item>
+                          <item>Rio Negro</item>
+                          <item>Paysandu</item>
+                          <item>Montevideo</item>
+                          <item>Maldonado</item>
+                          <item>Lavalleja</item>
+                          <item>Florida</item>
+                          <item>Flores</item>
+                          <item>Durazno</item>
+                          <item>Colonia</item>
+                          <item>Cerro</item>
+                          <item>Canelones</item>
+                          <item>Artigas</item>
+                          <item>Salto</item>
+                        </items></object>
+                    </property>
+                  </object>
+                </child>
+                <child>
+                  <object class="AdwEntryRow" id="locEntry">
+                    <property name="input-purpose">3</property>
+                    <property name="title">localidad</property>
+                    <property name="valign">3</property>
+                    <style>
+                      <class name="card"/>
+                    </style>
+                  </object>
+                </child>
+              </object>
+            </child>
+            <child>
+              <object class="GtkBox">
+                <property name="homogeneous">true</property>
+                <property name="spacing">24</property>
+                <child>
+                  <object class="AdwEntryRow" id="calleEntry">
+                    <property name="input-purpose">3</property>
+                    <property name="title">calle</property>
+                    <property name="valign">3</property>
+                    <style>
+                      <class name="card"/>
+                    </style>
+                  </object>
+                </child>
+                <child>
+                  <object class="AdwEntryRow" id="puertaEntry">
+                    <property name="input-purpose">3</property>
+                    <property name="title">puerta</property>
+                    <property name="valign">3</property>
+                    <style>
+                      <class name="card"/>
+                    </style>
+                  </object>
+                </child>
+              </object>
+            </child>
+            <child>
+              <object class="GtkDropDown" id="typeCombo">
+                <property name="model">
+                  <object class="GtkStringList">
+                                      <items>
+                      <item>Cliente</item>
+                      <item>Vendedor</item>
+                      <item>Empleado</item>
+                      <item>Administrador</item>
+                    </items>
+                  </object>
+                </property>
+              </object>
+            </child>
+            <child>
+              <object class="GtkBox">
+                <property name="homogeneous">true</property>
+                <property name="spacing">24</property>
+                <child>
+                  <object class="GtkButton" id="_deleteButton">
+                    <child>
+                      <object class="AdwButtonContent">
+                        <property name="icon-name">user-trash-symbolic</property>
+                        <property name="label">Borrar</property>
+                        <property name="valign">3</property>
+                      </object>
+                    </child>
+                    <style>
+                      <class name="destructive-action"/>
+                    </style>
+                  </object>
+                </child>
+                <child>
+                  <object class="GtkButton" id="_saveButton">
+                    <child>
+                      <object class="AdwButtonContent">
+                        <property name="icon-name">document-save-symbolic</property>
+                        <property name="label">Guardar</property>
+                        <property name="valign">3</property>
+                      </object>
+                    </child>
+                    <style>
+                      <class name="suggested-action"/>
+                    </style>
+                  </object>
+                </child>
+              </object>
+            </child>
           </object>
         </property>
       </object>
-    </child>
-    <child>
-      <object class="GtkBox">
-        <property name="homogeneous">true</property>
-        <property name="spacing">24</property>
-        <child>
-          <object class="GtkButton" id="_deleteButton">
-            <property name="icon-name">document-save-symbolic</property>
-            <property name="label">Borrar</property>
-            <style>
-              <class name="destructive-action"/>
-            </style>
-          </object>
-        </child>
-        <child>
-          <object class="GtkButton" id="_saveButton">
-            <property name="icon-name">document-save-symbolic</property>
-            <property name="label">Guardar</property>
-            <style>
-              <class name="suggested-action"/>
-            </style>
-          </object>
-        </child>
-      </object>
-    </child>
-  </object>
-    </child>
+    </property>
   </object>
 </interface>

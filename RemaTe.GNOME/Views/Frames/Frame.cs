@@ -11,9 +11,9 @@ using RemaTe.Logic;
 
 class Frame {
     public static void CreateAnimalAsync(Gtk.Window parent, Adw.Bin content) {
-        // var editWindow = ArticuloDialog.New(null, parent);
-        // editWindow.SetIconName("emoji-nature-symbolic");
-        // editWindow.Present();
+        var editWindow = AnimalDialog.New(null, parent);
+        editWindow.SetIconName("emoji-nature-symbolic");
+        editWindow.Present();
     }
     public static void CreateMaquinariaAsync(Gtk.Window parent, Adw.Bin content) {
         var editWindow = MaquinariaDialog.New(null, parent);
@@ -21,9 +21,9 @@ class Frame {
         editWindow.Present();
     }
     public static void CreateOtroAsync(Gtk.Window parent, Adw.Bin content) {
-        // var editWindow = OtroDialog.New(null, parent);
-        // editWindow.SetIconName("emoji-nature-symbolic");
-        // editWindow.Present();
+        var editWindow = OtroDialog.New(null, parent);
+        editWindow.SetIconName("emoji-nature-symbolic");
+        editWindow.Present();
     }
     public static void CreateLotes(Gtk.Window parent, Adw.Bin content) {
         LoteDialog editWindow = new(null, parent);
@@ -90,8 +90,8 @@ class Frame {
             box.Append(new LoteWidget(lote, parent, true, (sender, e) => ShowLote(lote, parent, content)));
         }
     }
-    public static async Task ShowRemateAsync(Gtk.Window parent, Adw.Bin content) {
-        var (err, response) = GenericL<RemateVO>.ReadAll();
+    public static async Task ShowFutureRemateAsync(Gtk.Window parent, Adw.Bin content) {
+        var (err, response) = Remate.ReadAllFutureWithLote();
         if (err != Errors.Ok) {
             Utils.ShowCommonErrorDialog(parent, err);
             return;
@@ -99,14 +99,49 @@ class Frame {
 
         content.SetChild(Gtk.Label.New("Cargando..."));
 
-        Gtk.FlowBox box = CommonFlowBox();
+        Gtk.FlowBox box = Gtk.FlowBox.New();
+        box.SetSelectionMode(Gtk.SelectionMode.None);
+        box.SetMaxChildrenPerLine(2);
+        box.SetRowSpacing(24);
+        box.SetColumnSpacing(24);
+        box.SetMarginTop(24);
+        box.SetMarginBottom(24);
+        box.SetMarginStart(24);
+        box.SetMarginEnd(24);
 
         Gtk.ScrolledWindow scroll = new();
         scroll.SetChild(box);
         content.SetChild(scroll);
 
-        await foreach (RemateVO remate in response) {
-            box.Append(new RemateWidget(remate, parent, true));
+        await foreach (RemateRep remate in response) {
+            box.Append(new RemateWidget(remate, parent, true, (sender, e) => ShowRemate(remate, parent, content)));
+        }
+    }
+    public static async Task ShowPastRemateAsync(Gtk.Window parent, Adw.Bin content) {
+        var (err, response) = Remate.ReadAllPastWithLote();
+        if (err != Errors.Ok) {
+            Utils.ShowCommonErrorDialog(parent, err);
+            return;
+        }
+
+        content.SetChild(Gtk.Label.New("Cargando..."));
+
+        Gtk.FlowBox box = Gtk.FlowBox.New();
+        box.SetSelectionMode(Gtk.SelectionMode.None);
+        box.SetMaxChildrenPerLine(2);
+        box.SetRowSpacing(24);
+        box.SetColumnSpacing(24);
+        box.SetMarginTop(24);
+        box.SetMarginBottom(24);
+        box.SetMarginStart(24);
+        box.SetMarginEnd(24);
+
+        Gtk.ScrolledWindow scroll = new();
+        scroll.SetChild(box);
+        content.SetChild(scroll);
+
+        await foreach (RemateRep remate in response) {
+            box.Append(new RemateWidget(remate, parent, true, (sender, e) => ShowRemate(remate, parent, content)));
         }
     }
     public static async Task ShowUsersAsync(Gtk.Window parent, Adw.Bin content) {
@@ -218,6 +253,9 @@ class Frame {
 
     public static void ShowLote(LoteRep lote, Gtk.Window parent, Adw.Bin content) {
         content.SetChild(new LoteFrame(lote, parent, true));
+    }
+    public static void ShowRemate(RemateRep remate, Gtk.Window parent, Adw.Bin content) {
+        content.SetChild(new RemateFrame(remate, parent, true));
     }
 
 

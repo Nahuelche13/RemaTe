@@ -54,12 +54,33 @@ public class LoteDA : Util<LoteVO> {
         }
     }
 
+    public static async IAsyncEnumerable<LoteRep> ReadAllWithArticuloNotLoted() {
+        using SQLiteCommand cmd = new(DBC.I.DbConn);
+        cmd.CommandText = @"
+            SELECT l.id, l.nombre, l.precio_base, l.comision
+            FROM lote l
+            LEFT JOIN integra i ON i.id_lote == l.id
+            WHERE i.id_lote IS NULL;";
+
+        var reader = await cmd.ExecuteReaderAsync();
+
+        while (reader.Read()) {
+            yield return new LoteRep() {
+                id = reader.GetInt32(0),
+                nombre = reader.GetString(1),
+                precio_base = reader.GetInt32(2),
+                comision = reader.GetInt32(3),
+                articulos = ReadArticulosOf(reader.GetInt32(0)).ToBlockingEnumerable()
+            };
+        }
+    }
+
     public static async IAsyncEnumerable<ArticuloRep> ReadArticulosOf(int id) {
         using SQLiteCommand cmd = new(DBC.I.DbConn);
         cmd.CommandText = @"
             SELECT a.id, a.nombre, a.descripcion
             FROM lote l
-            INNER JOIN articulo_lote al   ON l.id == al.id_lote
+            INNER JOIN pertenece al   ON l.id == al.id_lote
             INNER JOIN articulo a         ON a.id == al.id_articulo
             WHERE l.id = $id";
 

@@ -77,16 +77,20 @@ public record LoteVO {
     }
 }
 public record RemateVO {
-    [Key] public int id;
-    public long inicio;
+    [Key] public int? id;
+    public string nombre;
+    public string rematador;
+    public DateTime inicio;
     public int duracion;
     public int tipo;
     public int metodos_pago;
 
     public RemateVO() { }
-    public RemateVO(object id, object inicio, object duracion, object tipo, object metodos_pago) {
+    public RemateVO(object id, object nombre, object rematador, object inicio, object duracion, object tipo, object metodos_pago) {
         this.id = Convert.ToInt32(id);
-        this.inicio = Convert.ToInt64(inicio);
+        this.nombre = Convert.ToString(nombre);
+        this.rematador = Convert.ToString(rematador);
+        this.inicio = Convert.ToDateTime(inicio);
         this.duracion = Convert.ToInt32(duracion);
         this.tipo = Convert.ToInt32(tipo);
         this.metodos_pago = Convert.ToInt32(metodos_pago);
@@ -105,10 +109,10 @@ public record AnimalVO : ArticuloVO {
     [Key][ForeignKey("articulo(id)")] public int id_articulo;
     public string tipo;
     public string raza;
-    public int nacimiento;
+    public DateTime nacimiento;
 
     public AnimalVO() { }
-    public AnimalVO(int id_articulo, string tipo, string raza, int nacimiento) {
+    public AnimalVO(int id_articulo, string tipo, string raza, DateTime nacimiento) {
         this.id_articulo = id_articulo;
         this.tipo = tipo;
         this.raza = raza;

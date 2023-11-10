@@ -66,7 +66,9 @@ public class UserDialog : Adw.Window {
         }
 
         _saveButton.OnClicked += async (sender, e) => {
-            if (!Utils.IsNumber(ciEntry.GetText())) {
+            if (!Utils.IsNumber(ciEntry.GetText())
+            || !Utils.IsNumber(telEntry.GetText())
+            || !Utils.IsNumber(puertaEntry.GetText())) {
                 return;
             }
 

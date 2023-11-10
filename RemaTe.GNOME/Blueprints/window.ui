@@ -46,7 +46,7 @@
                     <property name="orientation">1</property>
                     <property name="spacing">10</property>
                     <child>
-                      <object class="GtkImage" id="_avatar">
+                      <object class="GtkImage">
                         <property name="pixel-size">128</property>
                         <property name="icon-name">emoji-nature-symbolic</property>
                         <style>
@@ -55,120 +55,134 @@
                       </object>
                     </child>
                     <child>
-                      <object class="GtkListBox">
-                        <property name="selection-mode">0</property>
+                      <object class="GtkBox" id="_actionsBox">
+                        <property name="orientation">1</property>
+                        <property name="spacing">10</property>
                         <child>
-                          <object class="GtkButton" id="_lstArtButton">
-                            <property name="label">Listar articulos</property>
-                            <style>
-                              <class name="flat"/>
-                            </style>
-                          </object>
-                        </child>
-                        <child>
-                          <object class="AdwExpanderRow">
-                            <property name="title">Crear articulo</property>
+                          <object class="GtkListBox">
+                            <property name="selection-mode">0</property>
                             <child>
-                              <object class="GtkButton" id="_crtAniButton">
-                                <property name="label">Animal</property>
+                              <object class="GtkButton" id="_lstArtButton">
+                                <property name="label">Listar articulos</property>
                                 <style>
                                   <class name="flat"/>
                                 </style>
                               </object>
                             </child>
                             <child>
-                              <object class="GtkButton" id="_crtMaqButton">
-                                <property name="label">Maquinaria</property>
+                              <object class="AdwExpanderRow">
+                                <property name="title">Crear articulo</property>
+                                <child>
+                                  <object class="GtkButton" id="_crtAniButton">
+                                    <property name="label">Animal</property>
+                                    <style>
+                                      <class name="flat"/>
+                                    </style>
+                                  </object>
+                                </child>
+                                <child>
+                                  <object class="GtkButton" id="_crtMaqButton">
+                                    <property name="label">Maquinaria</property>
+                                    <style>
+                                      <class name="flat"/>
+                                    </style>
+                                  </object>
+                                </child>
+                                <child>
+                                  <object class="GtkButton" id="_crtOtrButton">
+                                    <property name="label">Otro</property>
+                                    <style>
+                                      <class name="flat"/>
+                                    </style>
+                                  </object>
+                                </child>
+                              </object>
+                            </child>
+                            <style>
+                              <class name="boxed-list"/>
+                            </style>
+                          </object>
+                        </child>
+                        <child>
+                          <object class="GtkListBox">
+                            <property name="selection-mode">0</property>
+                            <child>
+                              <object class="GtkButton" id="_lstLteButton">
+                                <property name="label">Listar lotes</property>
                                 <style>
                                   <class name="flat"/>
                                 </style>
                               </object>
                             </child>
                             <child>
-                              <object class="GtkButton" id="_crtOtrButton">
-                                <property name="label">Otro</property>
+                              <object class="GtkButton" id="_crtLteButton">
+                                <property name="label">Crear lote</property>
                                 <style>
                                   <class name="flat"/>
                                 </style>
                               </object>
                             </child>
-                          </object>
-                        </child>
-                        <style>
-                          <class name="boxed-list"/>
-                        </style>
-                      </object>
-                    </child>
-                    <child>
-                      <object class="GtkListBox">
-                        <property name="selection-mode">0</property>
-                        <child>
-                          <object class="GtkButton" id="_lstLteButton">
-                            <property name="label">Listar lotes</property>
                             <style>
-                              <class name="flat"/>
+                              <class name="boxed-list"/>
                             </style>
                           </object>
                         </child>
                         <child>
-                          <object class="GtkButton" id="_crtLteButton">
-                            <property name="label">Crear lote</property>
+                          <object class="GtkListBox">
+                            <property name="selection-mode">0</property>
+                            <child>
+                              <object class="GtkButton" id="_lstFtrRmteButton">
+                                <property name="label">Listar remates</property>
+                                <style>
+                                  <class name="flat"/>
+                                </style>
+                              </object>
+                            </child>
+                            <child>
+                              <object class="GtkButton" id="_lstPstRmteButton">
+                                <property name="label">Remates pasados</property>
+                                <style>
+                                  <class name="flat"/>
+                                </style>
+                              </object>
+                            </child>
+                            <child>
+                              <object class="GtkButton" id="_crtRmteButton">
+                                <property name="label">Crear remate</property>
+                                <style>
+                                  <class name="flat"/>
+                                </style>
+                              </object>
+                            </child>
                             <style>
-                              <class name="flat"/>
-                            </style>
-                          </object>
-                        </child>
-                        <style>
-                          <class name="boxed-list"/>
-                        </style>
-                      </object>
-                    </child>
-                    <child>
-                      <object class="GtkListBox">
-                        <property name="selection-mode">0</property>
-                        <child>
-                          <object class="GtkButton" id="_lstRmteButton">
-                            <property name="label">Listar remates</property>
-                            <style>
-                              <class name="flat"/>
-                            </style>
-                          </object>
-                        </child>
-                        <child>
-                          <object class="GtkButton" id="_crtRmteButton">
-                            <property name="label">Crear remate</property>
-                            <style>
-                              <class name="flat"/>
-                            </style>
-                          </object>
-                        </child>
-                        <style>
-                          <class name="boxed-list"/>
-                        </style>
-                      </object>
-                    </child>
-                    <child>
-                      <object class="GtkListBox">
-                        <property name="selection-mode">0</property>
-                        <child>
-                          <object class="GtkButton" id="_lstUrsButton">
-                            <property name="label">Listar usuarios</property>
-                            <style>
-                              <class name="flat"/>
+                              <class name="boxed-list"/>
                             </style>
                           </object>
                         </child>
                         <child>
-                          <object class="GtkButton" id="_crtUsrButton">
-                            <property name="label">Crear usuario</property>
+                          <object class="GtkListBox">
+                            <property name="selection-mode">0</property>
+                            <child>
+                              <object class="GtkButton" id="_lstUrsButton">
+                                <property name="label">Listar usuarios</property>
+                                <style>
+                                  <class name="flat"/>
+                                </style>
+                              </object>
+                            </child>
+                            <child>
+                              <object class="GtkButton" id="_crtUsrButton">
+                                <property name="label">Crear usuario</property>
+                                <style>
+                                  <class name="flat"/>
+                                </style>
+                              </object>
+                            </child>
                             <style>
-                              <class name="flat"/>
+                              <class name="boxed-list"/>
                             </style>
                           </object>
                         </child>
-                        <style>
-                          <class name="boxed-list"/>
-                        </style>
                       </object>
                     </child>
                     <child>

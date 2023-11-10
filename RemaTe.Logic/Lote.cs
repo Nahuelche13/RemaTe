@@ -13,6 +13,12 @@ public class Lote {
             : (Errors.Unauthorized, null);
     }
 
+    public static (Errors errors, IAsyncEnumerable<LoteRep> lotes) ReadAllWithArticuloNotLoted() {
+        return true
+            ? (Errors.Ok, LoteDA.ReadAllWithArticuloNotLoted())
+            : (Errors.Unauthorized, null);
+    }
+
     public static async Task<Errors> AddArticulos(int id, List<ArticuloVO> articulos) {
         return Usuario.I.Auth != null && Usuario.I.Auth.permisos > (byte)Permissions.Empleado
             ? await LoteDA.AddArticulos(id, articulos)
