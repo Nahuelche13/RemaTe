@@ -1,0 +1,29 @@
+<Project Sdk="Microsoft.NET.Sdk">
+  <PropertyGroup>
+    <BuildDir>Build</BuildDir>
+    <OutputType>Exe</OutputType>
+    <TargetFramework>net7.0</TargetFramework>
+    <Nullable>annotations</Nullable>
+    <EnforceCodeStyleInBuild>true</EnforceCodeStyleInBuild>
+    <DisableTransitiveProjectReferences>true</DisableTransitiveProjectReferences>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <!-- <PackageReference Include="GetText.NET" Version="1.9.14" /> -->
+    <PackageReference Include="GirCore.Adw-1" Version="0.4.0" />
+    <PackageReference Include="Nickvision.GirExt" Version="2023.7.3" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="../RemaTe.Logic/RemaTe.Logic.csproj" />
+    <ProjectReference Include="../RemaTe.Common/RemaTe.Common.csproj" />
+  </ItemGroup>
+
+  <Target Name="EmbedUIFiles" BeforeTargets="BeforeResGen">
+    <ItemGroup>
+      <EmbeddedResource Include="Resources/logo-cyt.svg" Type="Non-Resx" WithCulture="false" />
+      <EmbeddedResource Include="Blueprints/*.ui" Type="Non-Resx" WithCulture="false" />
+      <EmbeddedResource Include="Blueprints/*/*.ui" Type="Non-Resx" WithCulture="false" />
+    </ItemGroup>
+  </Target>
+</Project>

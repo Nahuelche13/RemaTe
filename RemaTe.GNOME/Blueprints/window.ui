@@ -1,0 +1,245 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<interface>
+  <requires lib="gtk" version="4.0"/>
+  <object class="AdwApplicationWindow" id="_root">
+    <property name="maximized">true</property>
+    <child>
+      <object class="GtkBox">
+        <property name="orientation">1</property>
+        <child>
+          <object class="AdwHeaderBar" id="_headerBar">
+            <property name="title-widget">
+              <object class="AdwWindowTitle" id="_windowTitle">
+                <property name="title">RemaTe</property>
+              </object>
+            </property>
+            <child type="start">
+              <object class="GtkToggleButton" id="toggle_pane_button">
+                <property name="active">true</property>
+                <property name="icon-name">sidebar-show-symbolic</property>
+              </object>
+            </child>
+            <child type="end">
+              <object class="GtkMenuButton">
+                <property name="direction">4</property>
+                <property name="menu-model">mainMenu</property>
+                <property name="tooltip-text">Menu</property>
+                <property name="primary">true</property>
+              </object>
+            </child>
+          </object>
+        </child>
+        <child>
+          <object class="AdwFlap">
+            <property name="content">
+              <object class="AdwBin" id="_content"></object>
+            </property>
+            <property name="flap">
+              <object class="GtkCenterBox">
+                <property name="margin-bottom">5</property>
+                <property name="margin-end">5</property>
+                <property name="margin-start">5</property>
+                <property name="margin-top">5</property>
+                <property name="orientation">1</property>
+                <child type="start">
+                  <object class="GtkBox">
+                    <property name="orientation">1</property>
+                    <property name="spacing">10</property>
+                    <child>
+                      <object class="GtkImage" id="_avatar">
+                        <property name="pixel-size">128</property>
+                        <property name="icon-name">emoji-nature-symbolic</property>
+                        <style>
+                          <class name="card"/>
+                        </style>
+                      </object>
+                    </child>
+                    <child>
+                      <object class="GtkListBox">
+                        <property name="selection-mode">0</property>
+                        <child>
+                          <object class="GtkButton" id="_lstArtButton">
+                            <property name="label">Listar articulos</property>
+                            <style>
+                              <class name="flat"/>
+                            </style>
+                          </object>
+                        </child>
+                        <child>
+                          <object class="AdwExpanderRow">
+                            <property name="title">Crear articulo</property>
+                            <child>
+                              <object class="GtkButton" id="_crtAniButton">
+                                <property name="label">Animal</property>
+                                <style>
+                                  <class name="flat"/>
+                                </style>
+                              </object>
+                            </child>
+                            <child>
+                              <object class="GtkButton" id="_crtMaqButton">
+                                <property name="label">Maquinaria</property>
+                                <style>
+                                  <class name="flat"/>
+                                </style>
+                              </object>
+                            </child>
+                            <child>
+                              <object class="GtkButton" id="_crtOtrButton">
+                                <property name="label">Otro</property>
+                                <style>
+                                  <class name="flat"/>
+                                </style>
+                              </object>
+                            </child>
+                          </object>
+                        </child>
+                        <style>
+                          <class name="boxed-list"/>
+                        </style>
+                      </object>
+                    </child>
+                    <child>
+                      <object class="GtkListBox">
+                        <property name="selection-mode">0</property>
+                        <child>
+                          <object class="GtkButton" id="_lstLteButton">
+                            <property name="label">Listar lotes</property>
+                            <style>
+                              <class name="flat"/>
+                            </style>
+                          </object>
+                        </child>
+                        <child>
+                          <object class="GtkButton" id="_crtLteButton">
+                            <property name="label">Crear lote</property>
+                            <style>
+                              <class name="flat"/>
+                            </style>
+                          </object>
+                        </child>
+                        <style>
+                          <class name="boxed-list"/>
+                        </style>
+                      </object>
+                    </child>
+                    <child>
+                      <object class="GtkListBox">
+                        <property name="selection-mode">0</property>
+                        <child>
+                          <object class="GtkButton" id="_lstRmteButton">
+                            <property name="label">Listar remates</property>
+                            <style>
+                              <class name="flat"/>
+                            </style>
+                          </object>
+                        </child>
+                        <child>
+                          <object class="GtkButton" id="_crtRmteButton">
+                            <property name="label">Crear remate</property>
+                            <style>
+                              <class name="flat"/>
+                            </style>
+                          </object>
+                        </child>
+                        <style>
+                          <class name="boxed-list"/>
+                        </style>
+                      </object>
+                    </child>
+                    <child>
+                      <object class="GtkListBox">
+                        <property name="selection-mode">0</property>
+                        <child>
+                          <object class="GtkButton" id="_lstUrsButton">
+                            <property name="label">Listar usuarios</property>
+                            <style>
+                              <class name="flat"/>
+                            </style>
+                          </object>
+                        </child>
+                        <child>
+                          <object class="GtkButton" id="_crtUsrButton">
+                            <property name="label">Crear usuario</property>
+                            <style>
+                              <class name="flat"/>
+                            </style>
+                          </object>
+                        </child>
+                        <style>
+                          <class name="boxed-list"/>
+                        </style>
+                      </object>
+                    </child>
+                    <child>
+                      <object class="GtkButton" id="_loginButton">
+                        <property name="child">
+                          <object class="AdwButtonContent">
+                            <property name="icon-name">dialog-password-symbolic</property>
+                            <property name="label">Log In</property>
+                          </object>
+                        </property>
+                        <style>
+                          <class name="accent"/>
+                        </style>
+                      </object>
+                    </child>
+                    <child>
+                      <object class="GtkButton" id="_logoutButton">
+                        <property name="child">
+                          <object class="AdwButtonContent">
+                            <property name="icon-name">system-log-out-symbolic</property>
+                            <property name="label">Log Out</property>
+                          </object>
+                        </property>
+                        <property name="visible">false</property>
+                        <style>
+                          <class name="error"/>
+                        </style>
+                      </object>
+                    </child>
+                  </object>
+                </child>
+                <child type="end">
+                  <object class="GtkImage" id="_logo">
+                    <property name="pixel-size">128</property>
+                    <style>
+                      <class name="card"/>
+                    </style>
+                  </object>
+                </child>
+              </object>
+            </property>
+            <property name="reveal-flap" bind-source="toggle_pane_button" bind-property="active" bind-flags="sync-create|bidirectional"/>
+            <property name="separator">
+              <object class="GtkSeparator"></object>
+            </property>
+            <property name="vexpand">true</property>
+          </object>
+        </child>
+      </object>
+    </child>
+  </object>
+  <menu id="mainMenu">
+    <section>
+      <item>
+        <attribute name="action">win.keyboardShortcuts</attribute>
+        <attribute name="label">Keyboard Shortcuts</attribute>
+      </item>
+      <item>
+        <attribute name="action">win.help</attribute>
+        <attribute name="label">Help</attribute>
+      </item>
+      <item>
+        <attribute name="action">win.about</attribute>
+        <attribute name="label">About RemaTe</attribute>
+      </item>
+    </section>
+    <section>
+      <item>
+        <attribute name="action">win.quit</attribute>
+        <attribute name="label">Quit</attribute>
+      </item>
+    </section>
+  </menu>
+</interface>

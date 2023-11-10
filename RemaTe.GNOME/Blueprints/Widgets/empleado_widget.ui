@@ -1,0 +1,52 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<interface>
+  <requires lib="gtk" version="4.0"/>
+  <object class="AdwBin" id="_root">
+    <property name="valign">1</property>
+    <child>
+      <object class="GtkBox">
+        <property name="orientation">1</property>
+        <property name="margin-start">12</property>
+        <property name="margin-end">12</property>
+        <property name="margin-top">12</property>
+        <property name="margin-bottom">12</property>
+        <property name="spacing">12</property>
+        <child>
+          <object class="GtkLabel" id="_name">
+            <property name="label">Nombre + Apellido</property>
+            <style>
+              <class name="title-1"/>
+            </style>
+          </object>
+        </child>
+        <child>
+          <object class="AdwActionRow" id="_email">
+            <property name="title">e-mail</property>
+            <property name="subtitle">Value</property>
+            <property name="subtitle-selectable">true</property>
+            <style>
+              <class name="property"/>
+              <class name="card"/>
+            </style>
+          </object>
+        </child>
+        <child>
+          <object class="GtkCenterBox" id="_centerBox">
+            <child type="end">
+              <object class="GtkButton" id="edit">
+                <property name="icon-name">document-edit-symbolic</property>
+                <style>
+                  <class name="accent"/>
+                  <class name="circular"/>
+                </style>
+              </object>
+            </child>
+          </object>
+        </child>
+      </object>
+    </child>
+    <style>
+      <class name="card"/>
+    </style>
+  </object>
+</interface>

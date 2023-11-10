@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<interface>
+  <requires lib="gtk" version="4.0"/>
+  <object class="AdwWindow" id="_root">
+    <property name="default-width">800</property>
+    <property name="default-height">600</property>
+    <property name="title">Selecione los lotes</property>
+    <child>
+      <object class="GtkBox">
+        <property name="orientation">1</property>
+        <child>
+          <object class="AdwHeaderBar">
+            <property name="show-end-title-buttons">false</property>
+            <child type="start">
+              <object class="GtkButton" id="_cancelButton">
+                <property name="label">Cancelar</property>
+              </object>
+            </child>
+            <child type="end">
+              <object class="GtkButton" id="_saveButton">
+                <property name="label">Guardar</property>
+                <style>
+                  <class name="suggested-action"/>
+                </style>
+              </object>
+            </child>
+          </object>
+        </child>
+        <child>
+          <object class="GtkScrolledWindow">
+            <property name="propagate-natural-height">true</property>
+            <child>
+              <object class="GtkFlowBox" id="_flowbox">
+                <property name="margin-top">12</property>
+                <property name="margin-bottom">12</property>
+                <property name="margin-start">12</property>
+                <property name="margin-end">12</property>
+                <property name="orientation">0</property>
+                <property name="row-spacing">6</property>
+                <property name="column-spacing">6</property>
+                <property name="homogeneous">1</property>
+                <property name="selection-mode">3</property>
+              </object>
+            </child>
+          </object>
+        </child>
+      </object>
+    </child>
+  </object>
+</interface>

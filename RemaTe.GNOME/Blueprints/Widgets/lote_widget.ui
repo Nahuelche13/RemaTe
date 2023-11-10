@@ -1,0 +1,94 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<interface>
+  <requires lib="gtk" version="4.0"/>
+  <object class="AdwBin" id="_root">
+    <style>
+      <class name="card"/>
+    </style>
+    <child>
+      <object class="GtkBox">
+        <property name="orientation">1</property>
+        <property name="margin-top">24</property>
+        <property name="margin-bottom">24</property>
+        <property name="margin-start">24</property>
+        <property name="margin-end">24</property>
+        <property name="spacing">24</property>
+        <child>
+          <object class="GtkLabel" id="_title">
+            <property name="label">Titulo</property>
+            <style>
+              <class name="title-1"/>
+            </style>
+          </object>
+        </child>
+        <child>
+          <object class="GtkBox">
+            <property name="spacing">24</property>
+            <child>
+              <object class="AdwActionRow" id="_basePrice">
+                <property name="title">Precio base</property>
+                <property name="subtitle">$000</property>
+                <property name="subtitle-selectable">true</property>
+                <style>
+                  <class name="property"/>
+                  <class name="card"/>
+                </style>
+              </object>
+            </child>
+            <child>
+              <object class="AdwActionRow" id="_comision">
+                <property name="title">Comisión</property>
+                <property name="subtitle">00%</property>
+                <property name="subtitle-selectable">true</property>
+                <style>
+                  <class name="property"/>
+                  <class name="card"/>
+                </style>
+              </object>
+            </child>
+          </object>
+        </child>
+        <child>
+          <object class="GtkBox" id="_carouselBox">
+            <property name="valign">0</property>
+            <property name="vexpand">true</property>
+            <property name="hexpand">true</property>
+            <property name="orientation">1</property>
+            <child>
+              <object class="AdwCarousel" id="_carousel">
+                <property name="orientation">0</property>
+                <property name="allow-long-swipes">true</property>
+                <property name="allow-scroll-wheel">true</property>
+                <property name="spacing">24</property>
+              </object>
+            </child>
+            <child>
+              <object class="AdwCarouselIndicatorDots" id="_carouselIndicatorDots">
+                <property name="carousel">_carousel</property>
+                <property name="orientation">0</property>
+              </object>
+            </child>
+          </object>
+        </child>
+        <child>
+          <object class="GtkCenterBox">
+            <child type="start">
+              <object class="GtkButton" id="_moreInfo">
+                <property name="label">Ver más</property>
+              </object>
+            </child>
+            <child type="end">
+              <object class="GtkButton" id="_edit">
+                <property name="icon-name">document-edit-symbolic</property>
+                <style>
+                  <class name="accent"/>
+                  <class name="circular"/>
+                </style>
+              </object>
+            </child>
+          </object>
+        </child>
+      </object>
+    </child>
+  </object>
+</interface>
