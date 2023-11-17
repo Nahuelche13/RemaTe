@@ -78,6 +78,7 @@ public class RemateDA : Util<RemateVO> {
     }
 
     public static async IAsyncEnumerable<RemateRep> ReadAllFutureWithLote() {
+        await Task.Delay(1000);
         using SQLiteCommand cmd = new(DBC.I.DbConn);
         cmd.CommandText = @"
             SELECT r.id, r.nombre, r.rematador, r.inicio, r.duracion, r.tipo, r.metodos_pago

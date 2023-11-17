@@ -23,9 +23,9 @@ public static class Cliente {
             ? await ClienteDA.Update(cliente)
             : Errors.Unauthorized;
     }
-    public static (Errors error, IAsyncEnumerable<ClienteVO> values) ReadAll() {
+    public static (Errors error, IAsyncEnumerable<ClienteVO> values) ReadAllWithUsuarioWhere(UsuarioVO filer) {
         return Usuario.I.Auth != null && Usuario.I.Auth.permisos == (int)Permissions.Admin
-            ? (Errors.Ok, ClienteDA.ReadAll())
+            ? (Errors.Ok, ClienteDA.ReadAllWithUsuarioWhere(filer))
             : (Errors.Unauthorized, null);
     }
     public static (Errors error, IAsyncEnumerable<ClienteVO> values) ReadAllWithUsuario() {

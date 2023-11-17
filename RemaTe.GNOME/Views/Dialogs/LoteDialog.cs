@@ -4,7 +4,6 @@ using System.Threading.Tasks;
 using RemaTe.Common.Enums;
 using RemaTe.Common.Models;
 using RemaTe.GNOME.Helpers;
-using RemaTe.GNOME.Views.Widgets;
 using RemaTe.Logic;
 
 namespace RemaTe.GNOME.Views;
@@ -29,7 +28,7 @@ public class LoteDialog : Adw.Window {
         builder.Connect(this);
 
         if (lote != null) {
-            _idEntry.SetText(lote.id.ToString());
+            _idEntry.SetText(lote.nombre.ToString());
             _minEntry.SetText(lote.precio_base.ToString());
             _comisionEntry.SetText(lote.comision.ToString());
 

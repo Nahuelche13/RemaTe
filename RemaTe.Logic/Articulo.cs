@@ -14,6 +14,12 @@ public class Articulo {
             : (Errors.Unauthorized, null);
     }
 
+    public static async Task<Errors> RemoveImage(int id, string image) {
+        return Usuario.I.Auth != null && Usuario.I.Auth.permisos > (byte)Permissions.Vendedor
+            ? await ArticuloDA.RemoveImage(id, image)
+            : Errors.Unauthorized;
+    }
+
     public static async Task<Errors> AddImages(int id, List<string> images) {
         return Usuario.I.Auth != null && Usuario.I.Auth.permisos > (byte)Permissions.Vendedor
             ? await ArticuloDA.AddImages(id, images)
@@ -49,7 +55,22 @@ public class Maquinaria {
     }
     public static async Task<Errors> Delete(MaquinariaVO maquinaria) {
         return Usuario.I.Auth != null && Usuario.I.Auth.permisos > (byte)Permissions.Vendedor
-            ? await MaquinariaDA.Delete(maquinaria)
+            ? await MaquinariaDA.Delete((int)maquinaria.id)
+            : Errors.Unauthorized;
+    }
+    public static async Task<Errors> AddProperties(int id, IDictionary<string, string> properties) {
+        return Usuario.I.Auth != null && Usuario.I.Auth.permisos > (byte)Permissions.Vendedor
+            ? await MaquinariaDA.AddProperties(id, properties)
+            : Errors.Unauthorized;
+    }
+    public static async Task<(Errors error, IDictionary<string, string> properties)> ReadProperties(int id) {
+        return Usuario.I.Auth != null && Usuario.I.Auth.permisos > (byte)Permissions.Vendedor
+            ? await MaquinariaDA.ReadProperties(id)
+            : (Errors.Unauthorized, null);
+    }
+    public static async Task<Errors> RemoveProperties(int id, IEnumerable<string> properties) {
+        return Usuario.I.Auth != null && Usuario.I.Auth.permisos > (byte)Permissions.Vendedor
+            ? await MaquinariaDA.RemoveProperties(id, properties)
             : Errors.Unauthorized;
     }
 }
@@ -77,7 +98,22 @@ public class Animal {
     }
     public static async Task<Errors> Delete(AnimalVO animal) {
         return Usuario.I.Auth != null && Usuario.I.Auth.permisos > (byte)Permissions.Vendedor
-            ? await AnimalDA.Delete(animal)
+            ? await AnimalDA.Delete((int)animal.id)
+            : Errors.Unauthorized;
+    }
+    public static async Task<(Errors error, IDictionary<string, string> properties)> ReadProperties(int id) {
+        return Usuario.I.Auth != null && Usuario.I.Auth.permisos > (byte)Permissions.Vendedor
+            ? await AnimalDA.ReadProperties(id)
+            : (Errors.Unauthorized, null);
+    }
+    public static async Task<Errors> AddProperties(int id, IDictionary<string, string> properties) {
+        return Usuario.I.Auth != null && Usuario.I.Auth.permisos > (byte)Permissions.Vendedor
+            ? await AnimalDA.AddProperties(id, properties)
+            : Errors.Unauthorized;
+    }
+    public static async Task<Errors> RemoveProperties(int id, IEnumerable<string> properties) {
+        return Usuario.I.Auth != null && Usuario.I.Auth.permisos > (byte)Permissions.Vendedor
+            ? await AnimalDA.RemoveProperties(id, properties)
             : Errors.Unauthorized;
     }
 }
@@ -105,7 +141,22 @@ public class Otro {
     }
     public static async Task<Errors> Delete(OtroVO otro) {
         return Usuario.I.Auth != null && Usuario.I.Auth.permisos > (byte)Permissions.Vendedor
-            ? await OtroDA.Delete(otro)
+            ? await OtroDA.Delete((int)otro.id)
+            : Errors.Unauthorized;
+    }
+    public static async Task<(Errors error, IDictionary<string, string> properties)> ReadProperties(int id) {
+        return Usuario.I.Auth != null && Usuario.I.Auth.permisos > (byte)Permissions.Vendedor
+            ? await OtroDA.ReadProperties(id)
+            : (Errors.Unauthorized, null);
+    }
+    public static async Task<Errors> AddProperties(int id, IDictionary<string, string> properties) {
+        return Usuario.I.Auth != null && Usuario.I.Auth.permisos > (byte)Permissions.Vendedor
+            ? await OtroDA.AddProperties(id, properties)
+            : Errors.Unauthorized;
+    }
+    public static async Task<Errors> RemoveProperties(int id, IEnumerable<string> properties) {
+        return Usuario.I.Auth != null && Usuario.I.Auth.permisos > (byte)Permissions.Vendedor
+            ? await OtroDA.RemoveProperties(id, properties)
             : Errors.Unauthorized;
     }
 }

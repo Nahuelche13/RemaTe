@@ -26,7 +26,7 @@ class EmpleadoWidget : Adw.Bin {
         _ci.SetSubtitle(empleado.ci.ToString());
         _tel.SetSubtitle(empleado.telefono.ToString());
         _email.SetSubtitle(empleado.email.ToString());
-        _dpto.SetSubtitle(AppInfo.Departamentos[empleado.departamento]);
+        _dpto.SetSubtitle(AppInfo.Departamentos[(int)empleado.departamento]);
         _loc.SetSubtitle(empleado.localidad.ToString());
         _calle.SetSubtitle(empleado.calle.ToString());
         _puerta.SetSubtitle(empleado.puerta.ToString());

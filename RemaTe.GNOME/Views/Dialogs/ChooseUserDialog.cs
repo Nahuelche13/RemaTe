@@ -10,17 +10,17 @@ using RemaTe.Logic;
 
 namespace RemaTe.GNOME.Views;
 
-public class ChooseLoteDialog : Adw.Window {
+public class ChooseUserDialog : Adw.Window {
 #pragma warning disable 649
     [Gtk.Connect] private readonly Gtk.FlowBox _flowbox;
     [Gtk.Connect] private readonly Gtk.Button _cancelButton;
     [Gtk.Connect] private readonly Gtk.Button _saveButton;
 #pragma warning restore 649
 
-    readonly List<LoteVO> articulos = new();
+    readonly List<ClienteVO> clientes = new();
 
-    public ChooseLoteDialog(Gtk.Window parent, TaskCompletionSource<List<LoteVO>?> tcs) : this(Builder.FromFile("choose_articulo_dialog.ui"), parent, tcs) { }
-    private ChooseLoteDialog(Gtk.Builder builder, Gtk.Window parent, TaskCompletionSource<List<LoteVO>?> tcs) : base(builder.GetPointer("_root"), false) {
+    public ChooseUserDialog(Gtk.Window parent, TaskCompletionSource<ClienteVO> tcs) : this(Builder.FromFile("choose_articulo_dialog.ui"), parent, tcs) { }
+    private ChooseUserDialog(Gtk.Builder builder, Gtk.Window parent, TaskCompletionSource<ClienteVO> tcs) : base(builder.GetPointer("_root"), false) {
         builder.Connect(this);
 
         //Dialog Settings
@@ -35,11 +35,13 @@ public class ChooseLoteDialog : Adw.Window {
         })));
         AddController(shortcutController);
 
+        _flowbox.SetSelectionMode(Gtk.SelectionMode.Single);
+
         FillFlowBox();
         _cancelButton.OnClicked += (sender, e) => Close();
         _saveButton.OnClicked += (sender, e) => {
             var indeces = _flowbox.GetSelectedChildrenIndices();
-            var selected = indeces.Select(index => articulos[index]).ToList();
+            var selected = indeces.Select(index => clientes[index]).First();
             tcs.SetResult(selected);
             Close();
         };
@@ -47,16 +49,16 @@ public class ChooseLoteDialog : Adw.Window {
     }
 
     async void FillFlowBox() {
-        var (_, lotes) = Lote.ReadAllWithArticuloNotLoted();
+        var (_, clientesDB) = Cliente.ReadAllWithUsuario();
 
-        await foreach (var item in lotes) {
+        await foreach (var cliente in clientesDB) {
             var child = Gtk.FlowBoxChild.New();
-            var label = Gtk.Label.New(item.nombre);
+            var label = Gtk.Label.New(cliente.nombre);
             label.AddCssClass("card");
             label.AddCssClass("title-1");
             child.SetChild(label);
             _flowbox.Append(child);
-            articulos.Add(item);
+            clientes.Add(cliente);
         }
     }
 }

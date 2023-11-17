@@ -16,7 +16,7 @@ public class RemateDialog : Adw.Window {
     [Gtk.Connect] private readonly Adw.EntryRow _nombre;
     [Gtk.Connect] private readonly Adw.EntryRow _rematador;
 
-    [Gtk.Connect] private readonly Gtk.Button _calendarButton;
+    [Gtk.Connect] private readonly Gtk.MenuButton _calendarButton;
     [Gtk.Connect] private readonly Gtk.Calendar _calendar;
     [Gtk.Connect] private readonly Gtk.SpinButton _horaEntry;
     [Gtk.Connect] private readonly Gtk.SpinButton _minutoEntry;
@@ -42,13 +42,18 @@ public class RemateDialog : Adw.Window {
             _calendar.Month = inicioDate.Month;
             _calendar.Year = inicioDate.Year;
 
-            _calendarButton.SetLabel($"{inicioDate.Day}/{inicioDate.Month}/{inicioDate.Year}");
+            _nombre.SetText(remate.nombre);
+            _rematador.SetText(remate.rematador);
+
+            _calendarButton.SetLabel($"{inicioDate.Day}/{inicioDate.Month + 1}/{inicioDate.Year}");
 
             _horaEntry.SetValue(inicioDate.Hour);
             _minutoEntry.SetValue(inicioDate.Minute);
 
             _horasEntry.SetValue(float.Floor(remate.duracion / 60));
             _minutosEntry.SetValue(remate.duracion - (remate.duracion / 60));
+
+            _switch.SetActive(remate.metodos_pago == 1);
 
             _deleteButton.SetVisible(true);
         }
@@ -59,7 +64,7 @@ public class RemateDialog : Adw.Window {
         //Dialog Settings
         SetTransientFor(parent);
 
-        _calendar.OnDaySelected += (calendar, e) => _calendarButton.SetLabel($"{calendar.Day}/{calendar.Month}/{calendar.Year}");
+        _calendar.OnDaySelected += (calendar, e) => _calendarButton.SetLabel($"{calendar.Day}/{calendar.Month + 1}/{calendar.Year}");
 
         _addLoteButton.OnClicked += async (sender, e) => {
             TaskCompletionSource<List<LoteVO>?> tcs = new();
@@ -86,7 +91,7 @@ public class RemateDialog : Adw.Window {
         };
 
         _saveButton.OnClicked += async (sender, e) => {
-            var inicio = new DateTime(_calendar.Year, _calendar.Month, _calendar.Day, (int)_horaEntry.GetValue(), (int)_minutoEntry.GetValue(), 0);
+            var inicio = new DateTime(_calendar.Year, _calendar.Month + 1, _calendar.Day, (int)_horaEntry.GetValue(), (int)_minutoEntry.GetValue(), 0);
 
             RemateVO inputRmt = new() {
                 nombre = _nombre.GetText(),

@@ -29,6 +29,16 @@ public class Lote {
             ? await LoteDA.Create(lote)
             : (Errors.Unauthorized, -1);
     }
+    public static (Errors error, int monto) GetSellPrice(int id) {
+        return Usuario.I.Auth != null && Usuario.I.Auth.permisos > (byte)Permissions.Vendedor
+            ? LoteDA.GetSellPrice(id)
+            : (Errors.Unauthorized, -1);
+    }
+    public static async Task<Errors> Sell(int id, int buyer, int price) {
+        return Usuario.I.Auth != null && Usuario.I.Auth.permisos > (byte)Permissions.Vendedor
+            ? await LoteDA.Sell(id, buyer, price)
+            : Errors.Unauthorized;
+    }
     public static async Task<Errors> Update(LoteVO lote) {
         return Usuario.I.Auth != null && Usuario.I.Auth.permisos > (byte)Permissions.Vendedor
             ? await LoteDA.Update(lote)

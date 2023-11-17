@@ -33,10 +33,10 @@ public class ArticuloDA {
         SQLiteCommand cmd = DBC.I.DbConn.CreateCommand();
         cmd.CommandText = """
             SELECT animal.id_articulo as isAnimal, maquinaria.id_articulo as isMaquinaria, otro.id_articulo isOtro FROM articulo
-            FULL JOIN animal ON articulo.id == animal.id_articulo
-            FULL JOIN maquinaria ON articulo.id == maquinaria.id_articulo
-            FULL JOIN otro ON articulo.id == otro.id_articulo
-            WHERE articulo.id == $id;
+            FULL JOIN animal ON articulo.id = animal.id_articulo
+            FULL JOIN maquinaria ON articulo.id = maquinaria.id_articulo
+            FULL JOIN otro ON articulo.id = otro.id_articulo
+            WHERE articulo.id = $id;
         """;
         cmd.Parameters.AddWithValue("$id", id);
 
@@ -60,7 +60,7 @@ public class ArticuloDA {
         }
     }
 
-    public static async Task<Errors> AddImages(int id, List<string> images) {
+    public static async Task<Errors> AddImages(int id, IEnumerable<string> images) {
         SQLiteCommand cmd = DBC.I.DbConn.CreateCommand();
 
         foreach (var image in images) {
@@ -73,10 +73,22 @@ public class ArticuloDA {
 
         return Errors.Ok;
     }
-    public static async Task<Errors> AddImages(int id, string image) {
+
+    public static async Task<Errors> AddImage(int id, string image) {
         SQLiteCommand cmd = DBC.I.DbConn.CreateCommand();
 
         cmd.CommandText = "INSERT INTO imagenes (id_articulo, imagen) VALUES ($id_articulo, $imagen);";
+        cmd.Parameters.AddWithValue("$id_articulo", id);
+        cmd.Parameters.AddWithValue("$imagen", image);
+        await cmd.ExecuteNonQueryAsync();
+        cmd.Parameters.Clear();
+
+        return Errors.Ok;
+    }
+    public static async Task<Errors> RemoveImage(int id, string image) {
+        SQLiteCommand cmd = DBC.I.DbConn.CreateCommand();
+
+        cmd.CommandText = "DELETE FROM imagenes WHERE id_articulo=$id_articulo AND imagen=$imagen;";
         cmd.Parameters.AddWithValue("$id_articulo", id);
         cmd.Parameters.AddWithValue("$imagen", image);
         await cmd.ExecuteNonQueryAsync();
@@ -102,8 +114,8 @@ public class ArticuloDA {
     }
 }
 
-public class MaquinariaDA : Util<MaquinariaVO> {
-    public static new async Task<(Errors error, int id)> Create(MaquinariaVO maquinaria) {
+public class MaquinariaDA {
+    public static async Task<(Errors error, int id)> Create(MaquinariaVO maquinaria) {
         SQLiteTransaction transaction = DBC.I.DbConn.BeginTransaction();
         var cmd = new SQLiteCommand("", DBC.I.DbConn, transaction);
 
@@ -137,7 +149,7 @@ public class MaquinariaDA : Util<MaquinariaVO> {
         return (Errors.Ok, id);
     }
 
-    public static new async IAsyncEnumerable<MaquinariaVO> ReadAll() {
+    public static async IAsyncEnumerable<MaquinariaVO> ReadAll() {
         var cmd = DBC.I.DbConn.CreateCommand();
 
         cmd.CommandText = """
@@ -216,7 +228,7 @@ public class MaquinariaDA : Util<MaquinariaVO> {
         }
     }
 
-    public static new async Task<Errors> Update(MaquinariaVO maquinaria) {
+    public static async Task<Errors> Update(MaquinariaVO maquinaria) {
         var cmd = DBC.I.DbConn.CreateCommand();
 
         var sb = new StringBuilder();
@@ -257,10 +269,63 @@ public class MaquinariaDA : Util<MaquinariaVO> {
 
         return affected > 0 ? Errors.Ok : Errors.NotFound;
     }
+
+    public static async Task<(Errors error, IDictionary<string, string> properties)> ReadProperties(int id) {
+        SQLiteCommand cmd = DBC.I.DbConn.CreateCommand();
+
+        cmd.CommandText = """
+        SELECT propiedades.nombre, posee.valor
+        FROM posee
+        JOIN propiedades ON propiedades.nombre = posee.nombre_propiedad
+        WHERE posee.id_maquinaria = $id_maquinaria
+        """;
+        cmd.Parameters.AddWithValue("$id_maquinaria", id);
+        var reader = await cmd.ExecuteReaderAsync();
+        cmd.Parameters.Clear();
+
+        var properties = new Dictionary<string, string>();
+        while (reader.Read()) {
+            properties[reader.GetString(0)] = reader.GetString(1);
+        }
+
+        return (Errors.Ok, properties);
+    }
+    public static async Task<Errors> AddProperties(int id, IDictionary<string, string> properties) {
+        SQLiteCommand cmd = DBC.I.DbConn.CreateCommand();
+
+        foreach (var propertie in properties) {
+            cmd.CommandText = "INSERT INTO propiedades (nombre) VALUES ($nombre);";
+            cmd.Parameters.AddWithValue("$nombre", propertie.Key);
+            await cmd.ExecuteNonQueryAsync();
+            cmd.Parameters.Clear();
+
+            cmd.CommandText = "INSERT INTO posee (id_maquinaria, nombre_propiedad, valor) VALUES ($id_maquinaria, $nombre_propiedad, $valor);";
+            cmd.Parameters.AddWithValue("$id_maquinaria", id);
+            cmd.Parameters.AddWithValue("$nombre_propiedad", propertie.Key);
+            cmd.Parameters.AddWithValue("$valor", propertie.Value);
+            await cmd.ExecuteNonQueryAsync();
+            cmd.Parameters.Clear();
+        }
+
+        return Errors.Ok;
+    }
+    public static async Task<Errors> RemoveProperties(int id, IEnumerable<string> properties) {
+        SQLiteCommand cmd = DBC.I.DbConn.CreateCommand();
+
+        foreach (var propertie in properties) {
+            cmd.CommandText = "DELETE FROM posee WHERE id_maquinaria=$id_maquinaria AND nombre_propiedad=$nombre_propiedad);";
+            cmd.Parameters.AddWithValue("$id_maquinaria", id);
+            cmd.Parameters.AddWithValue("$nombre_propiedad", propertie);
+            await cmd.ExecuteNonQueryAsync();
+            cmd.Parameters.Clear();
+        }
+
+        return Errors.Ok;
+    }
 }
 
-public class AnimalDA : Util<AnimalVO> {
-    public static new async Task<(Errors error, int id)> Create(AnimalVO animal) {
+public class AnimalDA {
+    public static async Task<(Errors error, int id)> Create(AnimalVO animal) {
         SQLiteTransaction transaction = DBC.I.DbConn.BeginTransaction();
         var cmd = new SQLiteCommand("", DBC.I.DbConn, transaction);
 
@@ -294,7 +359,7 @@ public class AnimalDA : Util<AnimalVO> {
         return (Errors.Ok, id);
     }
 
-    public static new async IAsyncEnumerable<AnimalVO> ReadAll() {
+    public static async IAsyncEnumerable<AnimalVO> ReadAll() {
         var cmd = DBC.I.DbConn.CreateCommand();
 
         cmd.CommandText = """
@@ -310,7 +375,7 @@ public class AnimalDA : Util<AnimalVO> {
                 id_articulo = reader.GetInt32(0),
                 nombre = reader.GetString(1),
                 cantidad = reader.GetInt32(2),
-                tipo = reader.GetString(3),
+                tipo = reader.GetInt32(3),
                 raza = reader.GetString(4),
                 nacimiento = reader.GetDateTime(5),
                 descripcion = reader.GetString(6),
@@ -336,7 +401,7 @@ public class AnimalDA : Util<AnimalVO> {
                 id_articulo = reader.GetInt32(0),
                 nombre = reader.GetString(1),
                 cantidad = reader.GetInt32(2),
-                tipo = reader.GetString(3),
+                tipo = reader.GetInt32(3),
                 raza = reader.GetString(4),
                 nacimiento = reader.GetDateTime(5),
                 descripcion = reader.GetString(6),
@@ -362,7 +427,7 @@ public class AnimalDA : Util<AnimalVO> {
                 id_articulo = reader.GetInt32(0),
                 nombre = reader.GetString(1),
                 cantidad = reader.GetInt32(2),
-                tipo = reader.GetString(3),
+                tipo = reader.GetInt32(3),
                 raza = reader.GetString(4),
                 nacimiento = reader.GetDateTime(5),
                 descripcion = reader.GetString(6),
@@ -373,7 +438,7 @@ public class AnimalDA : Util<AnimalVO> {
         }
     }
 
-    public static new async Task<Errors> Update(AnimalVO animal) {
+    public static async Task<Errors> Update(AnimalVO animal) {
         var cmd = DBC.I.DbConn.CreateCommand();
 
         var sb = new StringBuilder();
@@ -408,10 +473,63 @@ public class AnimalDA : Util<AnimalVO> {
 
         return affected > 0 ? Errors.Ok : Errors.NotFound;
     }
+
+    public static async Task<(Errors error, IDictionary<string, string> properties)> ReadProperties(int id) {
+        SQLiteCommand cmd = DBC.I.DbConn.CreateCommand();
+
+        cmd.CommandText = """
+        SELECT nombre, valor
+        FROM atesora
+        JOIN propiedades ON propiedades.nombre = atesora.nombre_propiedad
+        WHERE atesora.id_animal = $id_animal
+        """;
+        cmd.Parameters.AddWithValue("$id_animal", id);
+        var reader = await cmd.ExecuteReaderAsync();
+        cmd.Parameters.Clear();
+
+        var properties = new Dictionary<string, string>();
+        while (reader.Read()) {
+            properties[reader.GetString(0)] = reader.GetString(1);
+        }
+
+        return (Errors.Ok, properties);
+    }
+    public static async Task<Errors> AddProperties(int id, IDictionary<string, string> properties) {
+        SQLiteCommand cmd = DBC.I.DbConn.CreateCommand();
+
+        foreach (var propertie in properties) {
+            cmd.CommandText = "INSERT INTO propiedades (nombre) VALUES ($nombre);";
+            cmd.Parameters.AddWithValue("$nombre", propertie.Key);
+            await cmd.ExecuteNonQueryAsync();
+            cmd.Parameters.Clear();
+
+            cmd.CommandText = "INSERT INTO atesora (id_animal, nombre_propiedad, valor) VALUES ($id_animal, $nombre_propiedad, $valor);";
+            cmd.Parameters.AddWithValue("$id_animal", id);
+            cmd.Parameters.AddWithValue("$nombre_propiedad", propertie.Key);
+            cmd.Parameters.AddWithValue("$valor", propertie.Value);
+            await cmd.ExecuteNonQueryAsync();
+            cmd.Parameters.Clear();
+        }
+
+        return Errors.Ok;
+    }
+    public static async Task<Errors> RemoveProperties(int id, IEnumerable<string> properties) {
+        SQLiteCommand cmd = DBC.I.DbConn.CreateCommand();
+
+        foreach (var propertie in properties) {
+            cmd.CommandText = "DELETE FROM atesora WHERE id_animal=$id_animal AND nombre_propiedad=$nombre_propiedad);";
+            cmd.Parameters.AddWithValue("$id_animal", id);
+            cmd.Parameters.AddWithValue("$nombre_propiedad", propertie);
+            await cmd.ExecuteNonQueryAsync();
+            cmd.Parameters.Clear();
+        }
+
+        return Errors.Ok;
+    }
 }
 
-public class OtroDA : Util<OtroVO> {
-    public static new async Task<(Errors error, int id)> Create(OtroVO otro) {
+public class OtroDA {
+    public static async Task<(Errors error, int id)> Create(OtroVO otro) {
         SQLiteTransaction transaction = DBC.I.DbConn.BeginTransaction();
         var cmd = new SQLiteCommand("", DBC.I.DbConn, transaction);
 
@@ -442,7 +560,7 @@ public class OtroDA : Util<OtroVO> {
         return (Errors.Ok, id);
     }
 
-    public static new async IAsyncEnumerable<OtroVO> ReadAll() {
+    public static async IAsyncEnumerable<OtroVO> ReadAll() {
         var cmd = DBC.I.DbConn.CreateCommand();
 
         cmd.CommandText = """
@@ -512,7 +630,7 @@ public class OtroDA : Util<OtroVO> {
         }
     }
 
-    public static new async Task<Errors> Update(OtroVO otro) {
+    public static async Task<Errors> Update(OtroVO otro) {
         var cmd = DBC.I.DbConn.CreateCommand();
 
         var sb = new StringBuilder();
@@ -533,12 +651,66 @@ public class OtroDA : Util<OtroVO> {
         var cmd = DBC.I.DbConn.CreateCommand();
 
         cmd.CommandText = """
-            DELETE FROM animal WHERE id_articulo = $id;
+            DELETE FROM otro WHERE id_articulo = $id;
             DELETE FROM articulo WHERE id = $id;
         """;
         cmd.Parameters.AddWithValue("id", id);
         var affected = await cmd.ExecuteNonQueryAsync();
 
         return affected > 0 ? Errors.Ok : Errors.NotFound;
+    }
+
+
+    public static async Task<(Errors error, IDictionary<string, string> properties)> ReadProperties(int id) {
+        SQLiteCommand cmd = DBC.I.DbConn.CreateCommand();
+
+        cmd.CommandText = """
+        SELECT nombre, valor
+        FROM tiene
+        JOIN propiedades ON propiedades.nombre = tiene.nombre_propiedad
+        WHERE tiene.id_otro = $id_otro
+        """;
+        cmd.Parameters.AddWithValue("$id_otro", id);
+        var reader = await cmd.ExecuteReaderAsync();
+        cmd.Parameters.Clear();
+
+        var properties = new Dictionary<string, string>();
+        while (reader.Read()) {
+            properties[reader.GetString(0)] = reader.GetString(1);
+        }
+
+        return (Errors.Ok, properties);
+    }
+    public static async Task<Errors> AddProperties(int id, IDictionary<string, string> properties) {
+        SQLiteCommand cmd = DBC.I.DbConn.CreateCommand();
+
+        foreach (var propertie in properties) {
+            cmd.CommandText = "INSERT INTO propiedades (nombre) VALUES ($nombre);";
+            cmd.Parameters.AddWithValue("$nombre", propertie.Key);
+            await cmd.ExecuteNonQueryAsync();
+            cmd.Parameters.Clear();
+
+            cmd.CommandText = "INSERT INTO tiene (id_otro, nombre_propiedad, valor) VALUES ($id_otro, $nombre_propiedad, $valor);";
+            cmd.Parameters.AddWithValue("$id_otro", id);
+            cmd.Parameters.AddWithValue("$nombre_propiedad", propertie.Key);
+            cmd.Parameters.AddWithValue("$valor", propertie.Value);
+            await cmd.ExecuteNonQueryAsync();
+            cmd.Parameters.Clear();
+        }
+
+        return Errors.Ok;
+    }
+    public static async Task<Errors> RemoveProperties(int id, IEnumerable<string> properties) {
+        SQLiteCommand cmd = DBC.I.DbConn.CreateCommand();
+
+        foreach (var propertie in properties) {
+            cmd.CommandText = "DELETE FROM posee WHERE id_maquinaria=$id_maquinaria AND nombre_propiedad=$nombre_propiedad);";
+            cmd.Parameters.AddWithValue("$id_maquinaria", id);
+            cmd.Parameters.AddWithValue("$nombre_propiedad", propertie);
+            await cmd.ExecuteNonQueryAsync();
+            cmd.Parameters.Clear();
+        }
+
+        return Errors.Ok;
     }
 }

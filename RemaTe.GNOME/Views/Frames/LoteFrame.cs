@@ -2,6 +2,7 @@ using System.IO;
 
 using RemaTe.Common.Models;
 using RemaTe.GNOME.Helpers;
+using RemaTe.Logic;
 
 namespace RemaTe.GNOME.Views.Widgets;
 class LoteFrame : Adw.Bin {
@@ -14,9 +15,9 @@ class LoteFrame : Adw.Bin {
     [Gtk.Connect] private readonly Adw.Carousel _carousel;
 #pragma warning restore 649
 
-    public LoteFrame(LoteRep lote, Gtk.Window? parent, bool canEdit = false, GObject.SignalHandler<Gtk.Button> onClicked = null)
-         : this(Builder.FromFile("lote_frame.ui"), lote, parent, canEdit, onClicked) { }
-    private LoteFrame(Gtk.Builder builder, LoteRep lote, Gtk.Window? parent, bool canEdit, GObject.SignalHandler<Gtk.Button> onClicked) : base(builder.GetPointer("_root"), false) {
+    public LoteFrame(LoteRep lote, Gtk.Window? parent, bool canEdit = false, GObject.SignalHandler<Gtk.Button> onClicked = null, string buttonLabel = "Ver más")
+         : this(Builder.FromFile("lote_frame.ui"), lote, parent, canEdit, onClicked, buttonLabel) { }
+    private LoteFrame(Gtk.Builder builder, LoteRep lote, Gtk.Window? parent, bool canEdit, GObject.SignalHandler<Gtk.Button> onClicked, string buttonLabel) : base(builder.GetPointer("_root"), false) {
         builder.Connect(this);
 
         if (!canEdit) _edit.SetVisible(false);
@@ -28,6 +29,8 @@ class LoteFrame : Adw.Bin {
 
         if (onClicked != null) _moreInfo.OnClicked += onClicked;
         else _moreInfo.SetVisible(false);
+
+        _moreInfo.SetLabel(buttonLabel);
 
         foreach (var articulo in lote.articulos) {
             var card = Adw.Bin.New();

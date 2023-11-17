@@ -26,7 +26,7 @@ class ClienteWidget : Adw.Bin {
         _ci.SetSubtitle(cliente.ci.ToString());
         _tel.SetSubtitle(cliente.telefono.ToString());
         _email.SetSubtitle(cliente.email.ToString());
-        _dpto.SetSubtitle(AppInfo.Departamentos[cliente.departamento]);
+        _dpto.SetSubtitle(AppInfo.Departamentos[(int)cliente.departamento]);
         _loc.SetSubtitle(cliente.localidad.ToString());
         _calle.SetSubtitle(cliente.calle.ToString());
         _puerta.SetSubtitle(cliente.puerta.ToString());

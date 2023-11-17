@@ -92,4 +92,10 @@ public record class AppInfo {
         "Artigas",
         "Salto",
     };
+
+    public static string[] EspeciesAnimales = {
+        "Vacas",
+        "Toros",
+        "Obejas"
+    };
 }

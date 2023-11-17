@@ -17,4 +17,9 @@ public class Empleado {
             ? (Errors.Ok, EmpleadoDA.ReadAllWithUsuario())
             : (Errors.Unauthorized, null);
     }
+    public static (Errors error, IAsyncEnumerable<EmpleadoVO> values) ReadAllWithUsuarioWhere(UsuarioVO filer) {
+        return Usuario.I.Auth != null && Usuario.I.Auth.permisos == (int)Permissions.Admin
+            ? (Errors.Ok, EmpleadoDA.ReadAllWithUsuarioWhere(filer))
+            : (Errors.Unauthorized, null);
+    }
 }

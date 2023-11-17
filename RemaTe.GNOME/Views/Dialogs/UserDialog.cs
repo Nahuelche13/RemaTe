@@ -60,8 +60,26 @@ public class UserDialog : Adw.Window {
             typeCombo.Selected = (uint)usuario.permisos;
 
             _deleteButton.SetVisible(true);
+
+            if (values.Value.empleado != null) {
+                if ((bool)values.Value.empleado.is_active) {
+                    (_deleteButton.GetChild() as Adw.ButtonContent).SetLabel("Desactivar");
+                }
+                else {
+                    (_deleteButton.GetChild() as Adw.ButtonContent).SetLabel("Borrar diefinitivamente");
+                }
+            }
+            if (values.Value.cliente != null) {
+                if ((bool)values.Value.cliente.is_active) {
+                    (_deleteButton.GetChild() as Adw.ButtonContent).SetLabel("Desactivar");
+                }
+                else {
+                    (_deleteButton.GetChild() as Adw.ButtonContent).SetLabel("Borrar diefinitivamente");
+                }
+            }
         }
         else {
+            _saveButton.SetSensitive(false);
             _deleteButton.SetVisible(false);
         }
 
@@ -75,7 +93,7 @@ public class UserDialog : Adw.Window {
             UsuarioVO usuario = new() {
                 id = int.Parse(ciEntry.GetText()),
                 hash_pwd = values == null ? Hasher.Hash(pwdEntry.GetText()) : null,
-                nombre = nameEntry.GetText(),
+                nombre = $"{nameEntry.GetText()} {apellidoEntry.GetText()}",
                 email = emailClienteEntry.GetText(),
                 telefono = int.Parse(telEntry.GetText()),
                 departamento = (int)dptoCombo.GetSelected(),
@@ -86,17 +104,16 @@ public class UserDialog : Adw.Window {
             };
 
             if (values != null) {
+                usuario.is_active = true;
+
                 Errors err = await Usuario.Update(usuario);
                 Utils.ShowCommonErrorDialog(parent, err);
             }
             else {
                 Errors err = await Usuario.Create(usuario);
-                if (typeCombo.GetSelected() < 3) {
-                    _ = Cliente.Create(new ClienteVO() { ci = usuario.id });
-                }
-                else {
-                    _ = Empleado.Create(new EmpleadoVO() { ci = usuario.id });
-                }
+                _ = typeCombo.GetSelected() <= 2
+                    ? Cliente.Create(new ClienteVO() { ci = (int)usuario.id })
+                    : Empleado.Create(new EmpleadoVO() { ci = (int)usuario.id });
                 Utils.ShowCommonErrorDialog(parent, err);
             }
             Close();
@@ -105,12 +122,22 @@ public class UserDialog : Adw.Window {
         _deleteButton.OnClicked += async (sender, e) => {
             Errors rspns = Errors.Ok;
             if (values.Value.empleado != null) {
-                rspns = await Usuario.Delete(values.Value.empleado);
-                await GenericL<EmpleadoVO>.Delete(values.Value.empleado);
+                if ((bool)values.Value.empleado.is_active) {
+                    rspns = await Usuario.Delete(values.Value.empleado);
+                }
+                else {
+                    rspns = await Usuario.DeleteGDPR((int)values.Value.empleado.id);
+                    await GenericL<EmpleadoVO>.Delete(values.Value.empleado);
+                }
             }
             if (values.Value.cliente != null) {
-                rspns = await Usuario.Delete(values.Value.cliente);
-                await GenericL<ClienteVO>.Delete(values.Value.cliente);
+                if ((bool)values.Value.cliente.is_active) {
+                    rspns = await Usuario.Delete(values.Value.cliente);
+                }
+                else {
+                    rspns = await Usuario.DeleteGDPR((int)values.Value.cliente.id);
+                    await GenericL<ClienteVO>.Delete(values.Value.cliente);
+                }
             }
             Utils.ShowCommonErrorDialog(parent, rspns);
             Close();
@@ -122,15 +149,16 @@ public class UserDialog : Adw.Window {
                     ciEntry.AddCssClass("error");
                 }
                 else { ciEntry.RemoveCssClass("error"); }
+                Validate();
             }
         };
-
         emailClienteEntry.OnNotify += (sender, e) => {
             if (e.Pspec.GetName() == "text") {
                 if (!Utils.IsValidEmail(emailClienteEntry.GetText())) {
                     emailClienteEntry.AddCssClass("error");
                 }
                 else { emailClienteEntry.RemoveCssClass("error"); }
+                Validate();
             }
         };
         puertaEntry.OnNotify += (sender, e) => {
@@ -139,6 +167,7 @@ public class UserDialog : Adw.Window {
                     puertaEntry.AddCssClass("error");
                 }
                 else { puertaEntry.RemoveCssClass("error"); }
+                Validate();
             }
         };
         telEntry.OnNotify += (sender, e) => {
@@ -147,7 +176,21 @@ public class UserDialog : Adw.Window {
                     telEntry.AddCssClass("error");
                 }
                 else { telEntry.RemoveCssClass("error"); }
+                Validate();
             }
         };
+    }
+    private void Validate() {
+        if (ciEntry.GetText().Length != 8 ||
+            !Utils.IsNumber(ciEntry.GetText()) ||
+            !Utils.IsValidEmail(emailClienteEntry.GetText()) ||
+            !Utils.IsNumber(puertaEntry.GetText()) ||
+            !Utils.IsNumber(telEntry.GetText())
+        ) {
+            _saveButton.SetSensitive(false);
+        }
+        else {
+            _saveButton.SetSensitive(true);
+        }
     }
 }

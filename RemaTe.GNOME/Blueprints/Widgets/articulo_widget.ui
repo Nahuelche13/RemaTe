@@ -42,40 +42,38 @@
         <child>
           <object class="GtkBox">
             <property name="spacing">24</property>
+            <property name="orientation">1</property>
             <child>
-              <object class="GtkBox">
-                <property name="orientation">1</property>
-                <child>
-                  <object class="AdwCarousel" id="_carousel">
-                    <property name="allow-long-swipes">true</property>
-                    <property name="allow-scroll-wheel">true</property>
-                  </object>
-                </child>
-                <child>
-                  <object class="AdwCarouselIndicatorDots">
-                    <property name="carousel">_carousel</property>
-                  </object>
-                </child>
+              <object class="AdwCarousel" id="_carousel">
+                <property name="allow-long-swipes">true</property>
+                <property name="allow-scroll-wheel">true</property>
+                <property name="halign">3</property>
               </object>
             </child>
             <child>
-              <object class="GtkFrame">
-                <property name="margin-bottom">12</property>
+              <object class="AdwCarouselIndicatorDots">
+                <property name="carousel">_carousel</property>
+              </object>
+            </child>
+          </object>
+        </child>
+        <child>
+          <object class="GtkFrame">
+            <property name="margin-bottom">12</property>
+            <child>
+              <object class="GtkScrolledWindow">
+                <property name="height-request">180</property>
+                <property name="hexpand">true</property>
                 <child>
-                  <object class="GtkScrolledWindow">
-                    <property name="height-request">180</property>
-                    <property name="hexpand">true</property>
-                    <child>
-                      <object class="GtkTextView" id="_textView">
-                        <property name="bottom-margin">12</property>
-                        <property name="left-margin">12</property>
-                        <property name="right-margin">12</property>
-                        <property name="top-margin">12</property>
-                        <property name="editable">true</property>
-                        <property name="cursor-visible">true</property>
-                        <property name="wrap-mode">1</property>
-                      </object>
-                    </child>
+                  <object class="GtkTextView" id="_textView">
+                    <property name="bottom-margin">12</property>
+                    <property name="left-margin">12</property>
+                    <property name="right-margin">12</property>
+                    <property name="top-margin">12</property>
+                    <property name="editable">true</property>
+                    <property name="cursor-visible">true</property>
+                    <property name="wrap-mode">2</property>
+                    <property name="justification">3</property>
                   </object>
                 </child>
               </object>

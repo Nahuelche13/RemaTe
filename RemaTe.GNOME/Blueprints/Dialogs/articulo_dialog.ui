@@ -52,9 +52,19 @@
                 <child>
                   <object class="AdwPreferencesGroup" id="_animalesGroup">
                     <property name="title">Animales</property>
+                    <property name="description">Ingrese la información necesaria de este animál</property>
                     <child>
-                      <object class="AdwEntryRow" id="_especieTypeRow">
-                        <property name="title">Tipo</property>
+                      <object class="AdwComboRow" id="_especieTypeRow">
+                        <property name="title" translatable="yes">Tipo</property>
+                        <property name="model">
+                          <object class="GtkStringList">
+                            <items>
+                              <item>Vacas</item>
+                              <item>Ovejas</item>
+                              <item>Toros</item>
+                            </items>
+                          </object>
+                        </property>
                       </object>
                     </child>
                     <child>
@@ -89,12 +99,7 @@
                 <child>
                   <object class="AdwPreferencesGroup" id="_maquinariaGroup">
                     <property name="title">Maquinaria</property>
-                    <property name="description">Ingrese la informacion necesaria de esta maquinaria</property>
-                    <child>
-                      <object class="AdwEntryRow" id="_typeMaqTypeRow">
-                        <property name="title">Tipo</property>
-                      </object>
-                    </child>
+                    <property name="description">Ingrese la información necesaria de esta maquinaria</property>
                     <child>
                       <object class="AdwEntryRow" id="_marcaTypeRow">
                         <property name="title">Marca</property>
@@ -133,28 +138,34 @@
                   </object>
                 </child>
                 <child>
-                  <object class="AdwBin">
+                  <object class="AdwPreferencesGroup">
+                    <property name="title">Descripción</property>
                     <child>
-                      <object class="GtkScrolledWindow">
-                        <property name="height-request">180</property>
-                        <property name="width-request">600</property>
+                      <object class="AdwBin">
                         <child>
-                          <object class="GtkTextView" id="_dscTextView">
-                            <property name="bottom-margin">12</property>
-                            <property name="left-margin">12</property>
-                            <property name="right-margin">12</property>
-                            <property name="top-margin">12</property>
-                            <property name="editable">true</property>
-                            <property name="cursor-visible">true</property>
-                            <property name="wrap-mode">1</property>
-                            <property name="css-classes">flat</property>
+                          <object class="GtkScrolledWindow">
+                            <property name="height-request">180</property>
+                            <property name="width-request">600</property>
+                            <child>
+                              <object class="GtkTextView" id="_dscTextView">
+                                <property name="bottom-margin">12</property>
+                                <property name="left-margin">12</property>
+                                <property name="right-margin">12</property>
+                                <property name="top-margin">12</property>
+                                <property name="editable">true</property>
+                                <property name="cursor-visible">true</property>
+                                <property name="wrap-mode">2</property>
+                                <property name="justification">3</property>
+                                <property name="css-classes">flat</property>
+                              </object>
+                            </child>
                           </object>
                         </child>
+                        <style>
+                          <class name="card"/>
+                        </style>
                       </object>
                     </child>
-                    <style>
-                      <class name="card"/>
-                    </style>
                   </object>
                 </child>
                 <child>
@@ -205,7 +216,7 @@
                 <property name="spacing">24</property>
                 <child>
                   <object class="GtkLabel">
-                    <property name="label">Agregar Imagenes</property>
+                    <property name="label">Agregar Imágenes</property>
                     <style>
                       <class name="title-1"/>
                     </style>

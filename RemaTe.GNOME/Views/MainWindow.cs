@@ -17,11 +17,18 @@ public partial class MainWindow : Adw.ApplicationWindow {
     [Gtk.Connect] private readonly Gtk.Button _loginButton;
     [Gtk.Connect] private readonly Gtk.Button _logoutButton;
     [Gtk.Connect] private readonly Adw.Bin _content;
+
+    [Gtk.Connect] private readonly Gtk.ListBox _articulosListBox;
+    [Gtk.Connect] private readonly Gtk.ListBox _lotesListBox;
+    [Gtk.Connect] private readonly Gtk.ListBox _rematesListBox;
+    [Gtk.Connect] private readonly Gtk.ListBox _usuariosListBox;
+
     [Gtk.Connect] private readonly Gtk.Button _lstArtButton;
     [Gtk.Connect] private readonly Gtk.Button _lstLteButton;
     [Gtk.Connect] private readonly Gtk.Button _lstFtrRmteButton;
     [Gtk.Connect] private readonly Gtk.Button _lstPstRmteButton;
     [Gtk.Connect] private readonly Gtk.Button _lstUrsButton;
+
     [Gtk.Connect] private readonly Gtk.Button _crtAniButton;
     [Gtk.Connect] private readonly Gtk.Button _crtMaqButton;
     [Gtk.Connect] private readonly Gtk.Button _crtOtrButton;
@@ -84,12 +91,86 @@ public partial class MainWindow : Adw.ApplicationWindow {
                 _logoutButton.SetVisible(true);
 
                 _actionsBox.SetVisible(true);
-                // _crtArtButton.SetVisible(true);
-                // _crtUsrButton.SetVisible(true);
-                // _crtLteButton.SetVisible(true);
-                // _crtRmteButton.SetVisible(true);
-                // 
-                // _lstUrsButton.SetVisible(true);
+
+                switch (Usuario.I.Auth.permisos) {
+                    case 4:
+                        _articulosListBox.SetVisible(true);
+                        _lotesListBox.SetVisible(true);
+                        _rematesListBox.SetVisible(true);
+                        _usuariosListBox.SetVisible(true);
+
+                        _lstArtButton.SetVisible(true);
+                        _lstLteButton.SetVisible(true);
+                        _lstFtrRmteButton.SetVisible(true);
+                        _lstPstRmteButton.SetVisible(true);
+                        _lstUrsButton.SetVisible(true);
+
+                        _crtAniButton.SetVisible(true);
+                        _crtMaqButton.SetVisible(true);
+                        _crtOtrButton.SetVisible(true);
+                        _crtLteButton.SetVisible(true);
+                        _crtRmteButton.SetVisible(true);
+                        _crtUsrButton.SetVisible(true);
+                        break;
+                    case 3:
+                        _articulosListBox.SetVisible(true);
+                        _lotesListBox.SetVisible(true);
+                        _rematesListBox.SetVisible(true);
+                        _usuariosListBox.SetVisible(false);
+
+                        _lstArtButton.SetVisible(true);
+                        _lstLteButton.SetVisible(true);
+                        _lstFtrRmteButton.SetVisible(true);
+                        _lstPstRmteButton.SetVisible(true);
+                        _lstUrsButton.SetVisible(true);
+
+                        _crtAniButton.SetVisible(true);
+                        _crtMaqButton.SetVisible(true);
+                        _crtOtrButton.SetVisible(true);
+                        _crtLteButton.SetVisible(true);
+                        _crtRmteButton.SetVisible(true);
+                        _crtUsrButton.SetVisible(false);
+                        break;
+                    case 2:
+                        _articulosListBox.SetVisible(true);
+                        _lotesListBox.SetVisible(true);
+                        _rematesListBox.SetVisible(true);
+                        _usuariosListBox.SetVisible(false);
+
+                        _lstArtButton.SetVisible(true);
+                        _lstLteButton.SetVisible(true);
+                        _lstFtrRmteButton.SetVisible(true);
+                        _lstPstRmteButton.SetVisible(true);
+                        _lstUrsButton.SetVisible(false);
+
+                        _crtAniButton.SetVisible(true);
+                        _crtMaqButton.SetVisible(true);
+                        _crtOtrButton.SetVisible(true);
+                        _crtLteButton.SetVisible(true);
+                        _crtRmteButton.SetVisible(false);
+                        _crtUsrButton.SetVisible(false);
+                        break;
+                    case 1:
+                    default:
+                        _articulosListBox.SetVisible(false);
+                        _lotesListBox.SetVisible(false);
+                        _rematesListBox.SetVisible(true);
+                        _usuariosListBox.SetVisible(false);
+
+                        _lstArtButton.SetVisible(false);
+                        _lstLteButton.SetVisible(false);
+                        _lstFtrRmteButton.SetVisible(true);
+                        _lstPstRmteButton.SetVisible(false);
+                        _lstUrsButton.SetVisible(false);
+
+                        _crtAniButton.SetVisible(false);
+                        _crtMaqButton.SetVisible(false);
+                        _crtOtrButton.SetVisible(false);
+                        _crtLteButton.SetVisible(false);
+                        _crtRmteButton.SetVisible(false);
+                        _crtUsrButton.SetVisible(false);
+                        break;
+                }
 
                 _content.SetChild(GreetingFrame.New());
             }
@@ -97,34 +178,50 @@ public partial class MainWindow : Adw.ApplicationWindow {
                 _loginButton.SetVisible(true);
                 _logoutButton.SetVisible(false);
 
-                _actionsBox.SetVisible(false);
-                // _crtArtButton.SetVisible(false);
-                // _crtUsrButton.SetVisible(false);
-                // _crtLteButton.SetVisible(false);
-                // _crtRmteButton.SetVisible(false);
-                // 
-                // _lstUrsButton.SetVisible(false);
+                _lstArtButton.SetVisible(false);
+                _lstLteButton.SetVisible(false);
+                _lstFtrRmteButton.SetVisible(true);
+                _lstPstRmteButton.SetVisible(false);
+                _lstUrsButton.SetVisible(false);
+
+                _crtAniButton.SetVisible(false);
+                _crtMaqButton.SetVisible(false);
+                _crtOtrButton.SetVisible(false);
+                _crtLteButton.SetVisible(false);
+                _crtRmteButton.SetVisible(false);
+                _crtUsrButton.SetVisible(false);
 
                 _content.SetChild(GreetingFrame.New());
             }
         };
 
-        _actionsBox.SetVisible(false);
+        _articulosListBox.SetVisible(false);
+        _lotesListBox.SetVisible(false);
+        _rematesListBox.SetVisible(true);
+        _usuariosListBox.SetVisible(false);
 
-        // _crtArtButton.SetVisible(false);
-        // _crtLteButton.SetVisible(false);
-        // _crtRmteButton.SetVisible(false);
-        // _lstUrsButton.SetVisible(false);
-        // _crtUsrButton.SetVisible(false);
+        _lstArtButton.SetVisible(false);
+        _lstLteButton.SetVisible(false);
+        _lstFtrRmteButton.SetVisible(true);
+        _lstPstRmteButton.SetVisible(false);
+        _lstUrsButton.SetVisible(false);
 
-        _loginButton.OnClicked += LoginDialog.LogIn;
-        _logoutButton.OnClicked += LoginDialog.LogOut;
+        _crtAniButton.SetVisible(false);
+        _crtMaqButton.SetVisible(false);
+        _crtOtrButton.SetVisible(false);
+        _crtLteButton.SetVisible(false);
+        _crtRmteButton.SetVisible(false);
+        _crtUsrButton.SetVisible(false);
+
+        #region Set OnClicked events
+        _loginButton.OnClicked += (sender, e) => LoginDialog.LogIn(this);
+        _logoutButton.OnClicked += (sender, e) => LoginDialog.LogOut();
 
         _lstArtButton.OnClicked += async (sender, e) => await Frame.ShowArticulosAsync(this, _content);
         _lstLteButton.OnClicked += async (sender, e) => await Frame.ShowLotesAsync(this, _content);
         _lstFtrRmteButton.OnClicked += async (sender, e) => await Frame.ShowFutureRemateAsync(this, _content);
         _lstPstRmteButton.OnClicked += async (sender, e) => await Frame.ShowPastRemateAsync(this, _content);
-        _lstUrsButton.OnClicked += async (sender, e) => await Frame.ShowUsersAsync(this, _content);
+        _lstUrsButton.OnClicked += async (sender, e) => Frame.ShowUsers(this, _content);
 
         _crtAniButton.OnClicked += (sender, e) => Frame.CreateAnimalAsync(this, _content);
         _crtMaqButton.OnClicked += (sender, e) => Frame.CreateMaquinariaAsync(this, _content);
@@ -132,6 +229,7 @@ public partial class MainWindow : Adw.ApplicationWindow {
         _crtLteButton.OnClicked += (sender, e) => Frame.CreateLotes(this, _content);
         _crtRmteButton.OnClicked += (sender, e) => Frame.CreateRemate(this, _content);
         _crtUsrButton.OnClicked += (sender, e) => Frame.CreateUser(this, _content);
+        #endregion
     }
 
     public void Startup() { application.AddWindow(this); Present(); }

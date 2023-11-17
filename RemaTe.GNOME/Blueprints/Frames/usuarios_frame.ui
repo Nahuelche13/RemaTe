@@ -1,0 +1,131 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<interface>
+  <requires lib="gtk" version="4.0"/>
+  <object class="GtkBox" id="_root">
+    <child>
+      <object class="GtkScrolledWindow">
+        <property name="hexpand">true</property>
+        <child>
+          <object class="GtkBox">
+            <property name="orientation">1</property>
+            <child>
+              <object class="GtkLabel">
+                <property name="label">Administradores:</property>
+                <style>
+                  <class name="title-1"/>
+                </style>
+              </object>
+            </child>
+            <child>
+              <object class="AdwBin" id="_administradoresBin"></object>
+            </child>
+            <child>
+              <object class="GtkSeparator">
+                <property name="margin-bottom">12</property>
+              </object>
+            </child>
+            <child>
+              <object class="GtkLabel">
+                <property name="label">Empleados:</property>
+                <style>
+                  <class name="title-1"/>
+                </style>
+              </object>
+            </child>
+            <child>
+              <object class="AdwBin" id="_empleadosBin"></object>
+            </child>
+            <child>
+              <object class="GtkSeparator">
+                <property name="margin-bottom">12</property>
+              </object>
+            </child>
+            <child>
+              <object class="GtkLabel">
+                <property name="label">Vendedores:</property>
+                <style>
+                  <class name="title-1"/>
+                </style>
+              </object>
+            </child>
+            <child>
+              <object class="AdwBin" id="_vendedoresBin"></object>
+            </child>
+            <child>
+              <object class="GtkSeparator">
+                <property name="margin-bottom">12</property>
+              </object>
+            </child>
+            <child>
+              <object class="GtkLabel">
+                <property name="label">Clientes:</property>
+                <style>
+                  <class name="title-1"/>
+                </style>
+              </object>
+            </child>
+            <child>
+              <object class="AdwBin" id="_clientesBin"></object>
+            </child>
+            <child>
+              <object class="GtkSeparator">
+                <property name="margin-bottom">12</property>
+              </object>
+            </child>
+          </object>
+        </child>
+      </object>
+    </child>
+    <child>
+      <object class="AdwBin">
+        <style>
+          <class name="card"/>
+        </style>
+        <child>
+          <object class="GtkBox">
+            <property name="margin-start">12</property>
+            <property name="margin-end">12</property>
+            <property name="margin-top">12</property>
+            <property name="margin-bottom">12</property>
+            <property name="orientation">1</property>
+            <property name="spacing">24</property>
+            <child>
+              <object class="AdwEntryRow" id="_ciEntry">
+                <property name="title">CI:</property>
+                <style>
+                  <class name="card"/>
+                </style>
+              </object>
+            </child>
+            <child>
+              <object class="AdwActionRow">
+                <property name="title">Mostrar inactivos</property>
+                <child>
+                  <object class="GtkSwitch" id="_showInactiveSitch">
+                    <property name="valign">3</property>
+                  </object>
+                </child>
+                <style>
+                  <class name="card"/>
+                </style>
+              </object>
+            </child>
+            <child>
+              <object class="GtkButton" id="_applyButton">
+                <child>
+                  <object class="AdwButtonContent">
+                    <property name="icon-name">system-search-symbolic</property>
+                    <property name="label">Aplicar fiiltros</property>
+                  </object>
+                </child>
+                <style>
+                  <class name="suggested-action"/>
+                </style>
+              </object>
+            </child>
+          </object>
+        </child>
+      </object>
+    </child>
+  </object>
+</interface>

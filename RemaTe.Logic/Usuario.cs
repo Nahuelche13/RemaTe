@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 
@@ -53,20 +54,31 @@ public class Usuario {
             : Errors.Unauthorized;
     }
 
-    public static (Errors error, IAsyncEnumerable<UsuarioVO> values) ReadAll() {
-        return I.Auth != null && I.Auth.permisos == (int)Permissions.Admin
-            ? (Errors.Ok, UsuarioDA.ReadAll())
-            : (Errors.Unauthorized, null);
-    }
-    public static (Errors error, IAsyncEnumerable<UsuarioVO> values) Read(UsuarioVO usr) {
-        return I.Auth != null && I.Auth.permisos == (int)Permissions.Admin
-            ? (Errors.Ok, UsuarioDA.ReadWithFilter(usr))
-            : (Errors.Unauthorized, null);
-    }
+    // public static (Errors error, IAsyncEnumerable<UsuarioVO> values) ReadAll() {
+    //     return I.Auth != null && I.Auth.permisos >= (byte)Permissions.Empleado
+    //         ? (Errors.Ok, UsuarioDA.ReadAll())
+    //         : (Errors.Unauthorized, null);
+    // }
+    // public static (Errors error, IAsyncEnumerable<UsuarioVO> values) Read(UsuarioVO usr) {
+    //     return I.Auth != null && I.Auth.permisos == (int)Permissions.Admin
+    //         ? (Errors.Ok, UsuarioDA.ReadWithFilter(usr))
+    //         : (Errors.Unauthorized, null);
+    // }
 
     public static async Task<Errors> Delete(UsuarioVO usr) {
         return I.Auth != null && I.Auth.permisos == (int)Permissions.Admin
             ? await UsuarioDA.Delete(usr)
+            : Errors.Unauthorized;
+    }
+
+    public static async Task<Errors> DeleteGDPR(int id) {
+        return I.Auth != null && I.Auth.permisos == (int)Permissions.Admin
+            ? await UsuarioDA.DeleteGDPR(id)
+            : Errors.Unauthorized;
+    }
+    public static async Task<Errors> Activate(int id) {
+        return I.Auth != null && I.Auth.permisos == (int)Permissions.Admin
+            ? await UsuarioDA.Activate(id)
             : Errors.Unauthorized;
     }
 

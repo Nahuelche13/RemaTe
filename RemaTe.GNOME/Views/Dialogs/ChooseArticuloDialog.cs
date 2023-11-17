@@ -1,13 +1,11 @@
 using System.Collections.Generic;
 using System.Linq;
-using System.Linq.Expressions;
 using System.Threading.Tasks;
 
 using Nickvision.GirExt;
 
 using RemaTe.Common.Models;
 using RemaTe.GNOME.Helpers;
-using RemaTe.GNOME.Views.Widgets;
 using RemaTe.Logic;
 
 namespace RemaTe.GNOME.Views;
@@ -37,7 +35,7 @@ public class ChooseArticuloDialog : Adw.Window {
         })));
         AddController(shortcutController);
 
-        FillFlowBox(tcs);
+        FillFlowBox();
         _cancelButton.OnClicked += (sender, e) => Close();
         _saveButton.OnClicked += (sender, e) => {
             var indeces = _flowbox.GetSelectedChildrenIndices();
@@ -48,35 +46,35 @@ public class ChooseArticuloDialog : Adw.Window {
         OnCloseRequest += (sender, e) => false;
     }
 
-    async void FillFlowBox(TaskCompletionSource<List<ArticuloVO>> tcs) {
+    async void FillFlowBox() {
         var (_, animales) = Animal.ReadNotLoted();
         var (_, maquinarias) = Maquinaria.ReadNotLoted();
         var (_, otros) = Otro.ReadNotLoted();
 
         await foreach (var item in animales) {
             var child = Gtk.FlowBoxChild.New();
-            var button = Gtk.Label.New(item.nombre);
-            button.AddCssClass("card");
-            button.AddCssClass("title-1");
-            child.SetChild(button);
+            var label = Gtk.Label.New(item.nombre);
+            label.AddCssClass("card");
+            label.AddCssClass("title-1");
+            child.SetChild(label);
             _flowbox.Append(child);
             articulos.Add(item);
         }
         await foreach (var item in maquinarias) {
             var child = Gtk.FlowBoxChild.New();
-            var button = Gtk.Label.New(item.nombre);
-            button.AddCssClass("card");
-            button.AddCssClass("title-1");
-            child.SetChild(button);
+            var label = Gtk.Label.New(item.nombre);
+            label.AddCssClass("card");
+            label.AddCssClass("title-1");
+            child.SetChild(label);
             _flowbox.Append(child);
             articulos.Add(item);
         }
         await foreach (var item in otros) {
             var child = Gtk.FlowBoxChild.New();
-            var button = Gtk.Label.New(item.nombre);
-            button.AddCssClass("card");
-            button.AddCssClass("title-1");
-            child.SetChild(button);
+            var label = Gtk.Label.New(item.nombre);
+            label.AddCssClass("card");
+            label.AddCssClass("title-1");
+            child.SetChild(label);
             _flowbox.Append(child);
             articulos.Add(item);
         }

@@ -8,19 +8,20 @@ namespace RemaTe.Common.Models;
 public record DepartamentoVO { [Key] public int id; public string nombre; }
 
 public record UsuarioVO {
-    [Key] public int id;
+    [Key] public int? id;
     public string hash_pwd;
-    public int permisos;
+    public int? permisos;
     public string nombre;
     public string email;
-    public int telefono;
-    [ForeignKey("departamento(id)")] public int departamento;
+    public int? telefono;
+    [ForeignKey("departamento(id)")] public int? departamento;
     public string localidad;
     public string calle;
-    public int puerta;
+    public int? puerta;
+    public bool? is_active;
 
     public UsuarioVO() { }
-    public UsuarioVO(object id, object hash_pwd, object permisos, object nombre, object email, object telefono, object departamento, object localidad, object calle, object puerta) {
+    public UsuarioVO(object id, object hash_pwd, object permisos, object nombre, object email, object telefono, object departamento, object localidad, object calle, object puerta, object is_active) {
         this.id = Convert.ToInt32(id);
         this.hash_pwd = Convert.ToString(hash_pwd);
         this.permisos = Convert.ToInt32(permisos);
@@ -31,6 +32,7 @@ public record UsuarioVO {
         this.localidad = Convert.ToString(localidad);
         this.calle = Convert.ToString(calle);
         this.puerta = Convert.ToInt32(puerta);
+        this.is_active = Convert.ToBoolean(is_active);
     }
 }
 public record EmpleadoVO : UsuarioVO {
@@ -107,12 +109,12 @@ public record OtroVO : ArticuloVO {
 }
 public record AnimalVO : ArticuloVO {
     [Key][ForeignKey("articulo(id)")] public int id_articulo;
-    public string tipo;
+    public int tipo;
     public string raza;
     public DateTime nacimiento;
 
     public AnimalVO() { }
-    public AnimalVO(int id_articulo, string tipo, string raza, DateTime nacimiento) {
+    public AnimalVO(int id_articulo, int tipo, string raza, DateTime nacimiento) {
         this.id_articulo = id_articulo;
         this.tipo = tipo;
         this.raza = raza;

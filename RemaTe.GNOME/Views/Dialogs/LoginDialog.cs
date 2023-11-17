@@ -3,7 +3,6 @@ using System.Threading.Tasks;
 
 using RemaTe.GNOME.Helpers;
 using RemaTe.Logic;
-using RemaTe.Shared.Controllers;
 
 namespace RemaTe.GNOME.Views;
 
@@ -71,8 +70,7 @@ public class LoginDialog : Adw.Window {
         }
     }
 
-    public static async void LogIn(Gtk.Button sender, EventArgs e) {
-        Gtk.Window parent = sender.GetAncestor(Gtk.Window.GetGType()) as Gtk.Window;
+    public static async void LogIn(Gtk.Window parent) {
         Tuple<int, string> rsp = await AccountLoginAsync(parent);
         bool success = false;
         if (rsp != null) success = await Usuario.LogIn(rsp.Item1, rsp.Item2);
@@ -85,7 +83,7 @@ public class LoginDialog : Adw.Window {
         }
     }
 
-    public static void LogOut(Gtk.Button _, EventArgs e) {
+    public static void LogOut() {
         Usuario.LogOut();
     }
 

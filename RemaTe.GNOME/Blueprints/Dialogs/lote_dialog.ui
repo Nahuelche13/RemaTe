@@ -38,7 +38,7 @@
                       <class name="card"/>
                     </style>
                     <property name="input-purpose">7</property>
-                    <property name="title">ID:</property>
+                    <property name="title">Nombre:</property>
                   </object>
                 </child>
                 <child>

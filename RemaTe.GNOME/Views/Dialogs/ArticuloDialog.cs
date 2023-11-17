@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.Threading.Tasks;
 
 using Nickvision.GirExt;
 
@@ -7,6 +8,7 @@ using RemaTe.Common.Enums;
 using RemaTe.Common.Models;
 using RemaTe.GNOME.Helpers;
 using RemaTe.Logic;
+using RemaTe.Shared.Models;
 
 namespace RemaTe.GNOME.Views;
 /*
@@ -385,7 +387,7 @@ public class ArticuloDialog {
 }
 
 public class MaquinariaDialog : ArticuloDialog {
-    public static Adw.Window New(MaquinariaVO? maquinaria, Gtk.Window parent) {
+    public static async Task<Adw.Window> NewAsync(MaquinariaVO? maquinaria, Gtk.Window parent) {
         List<string> imagesPaths = new();
         List<Adw.EntryRow> customPropertyRows = new();
 
@@ -453,6 +455,51 @@ public class MaquinariaDialog : ArticuloDialog {
             dscTextView.Buffer.Text = maquinaria.descripcion;
 
             deleteButton.SetVisible(true);
+
+            var (_, paths) = await Articulo.ReadImages(maquinaria);
+
+            foreach (var path in paths) {
+                imagesPaths.Add(path);
+
+                using var texture = Gdk.Texture.NewFromFilename(path);
+                using var image = Gtk.Image.NewFromPaintable(texture);
+                image.SetPixelSize(196);
+
+                var button = Gtk.Button.New();
+                button.SetChild(image);
+
+                var flowChild = Gtk.FlowBoxChild.New();
+                flowChild.SetChild(button);
+
+                images.Append(flowChild);
+
+                button.OnClicked += (sender, e) => {
+                    imagesPaths.Remove(path);
+                    images.Remove(flowChild);
+                    _ = Articulo.RemoveImage((int)maquinaria.id, path);
+                };
+            }
+
+
+            var (_, properties) = await Maquinaria.ReadProperties((int)maquinaria.id);
+
+            foreach (var property in properties) {
+                var row = Adw.EntryRow.New();
+                row.SetTitle(property.Key);
+                var removeButton = Gtk.Button.New();
+                removeButton.SetValign(Gtk.Align.Center);
+                removeButton.SetTooltipText("Remove Custom Property");
+                removeButton.SetIconName("user-trash-symbolic");
+                removeButton.AddCssClass("flat");
+                removeButton.OnClicked += (sender, e) => {
+                    customPropertyRows.Remove(row);
+                    customPropertiesGroup.Remove(row);
+                };
+                row.SetText(property.Value);
+                row.AddSuffix(removeButton);
+                customPropertyRows.Add(row);
+                customPropertiesGroup.Add(row);
+            }
         }
         else {
             saveButton.SetSensitive(true);
@@ -498,7 +545,7 @@ public class MaquinariaDialog : ArticuloDialog {
         };
         */
 
-        nacimientoCalendar.OnDaySelected += (calendar, e) => nacimientoCalendarButton.SetLabel($"{calendar.Day}/{calendar.Month}/{calendar.Year}");
+        nacimientoCalendar.OnDaySelected += (calendar, e) => nacimientoCalendarButton.SetLabel($"{calendar.Day}/{calendar.Month + 1}/{calendar.Year}");
 
         addNewPropertyButton.OnClicked += AddCustomProperty(customPropertyRows, customPropertiesGroup, window);
         addImageButton.OnClicked += AddImage(imagesPaths, images, window);
@@ -528,10 +575,15 @@ public class MaquinariaDialog : ArticuloDialog {
             else {
                 inputArt.id = null;
                 var (err, id) = await Maquinaria.Create(inputArt);
-                if (err != Errors.Ok) {
-                    Utils.ShowCommonErrorDialog(parent, err);
-                }
+                if (err != Errors.Ok) { Utils.ShowCommonErrorDialog(parent, err); }
                 err = await Articulo.AddImages(id, imagesPaths);
+                if (err != Errors.Ok) { Utils.ShowCommonErrorDialog(parent, err); }
+
+                var listOfProperties = new Dictionary<string, string>();
+                foreach (var entry in customPropertyRows) {
+                    listOfProperties[entry.GetTitle()] = entry.GetText();
+                }
+                err = await Maquinaria.AddProperties(id, listOfProperties);
                 Utils.ShowCommonErrorDialog(parent, err);
             }
             window.Close();
@@ -581,7 +633,7 @@ public class MaquinariaDialog : ArticuloDialog {
     */
 }
 public class AnimalDialog : ArticuloDialog {
-    public static Adw.Window New(AnimalVO? animal, Gtk.Window parent) {
+    public static async Task<Adw.Window> NewAsync(AnimalVO? animal, Gtk.Window parent) {
         List<string> imagesPaths = new();
         List<Adw.EntryRow> customPropertyRows = new();
 
@@ -596,7 +648,7 @@ public class AnimalDialog : ArticuloDialog {
         var animalesGroup = builder.GetObject("_animalesGroup") as Adw.PreferencesGroup;
         var maquinariaGroup = builder.GetObject("_maquinariaGroup") as Adw.PreferencesGroup;
 
-        var especieTypeRow = builder.GetObject("_especieTypeRow") as Adw.EntryRow;
+        var especieTypeRow = builder.GetObject("_especieTypeRow") as Adw.ComboRow;
         var razaTypeRow = builder.GetObject("_razaTypeRow") as Adw.EntryRow;
 
         var marcaTypeRow = builder.GetObject("_marcaTypeRow") as Adw.EntryRow;
@@ -630,6 +682,8 @@ public class AnimalDialog : ArticuloDialog {
         window.AddController(shortcutController);
         #endregion
 
+        especieTypeRow.Model = Gtk.StringList.New(AppInfo.EspeciesAnimales);
+
         animalesGroup.SetVisible(true);
         maquinariaGroup.SetVisible(false);
 
@@ -643,32 +697,55 @@ public class AnimalDialog : ArticuloDialog {
             nameEntry.SetText(animal.nombre);
             cantidadEntry.SetText(animal.cantidad.ToString());
 
-            especieTypeRow.SetText(animal.tipo);
+            especieTypeRow.SetSelected((uint)animal.tipo);
             razaTypeRow.SetText(animal.raza);
 
             nacimientoCalendar.Day = animal.nacimiento.Day;
             nacimientoCalendar.Month = animal.nacimiento.Month;
             nacimientoCalendar.Year = animal.nacimiento.Year;
 
-            nacimientoCalendarButton.SetLabel($"{animal.nacimiento.Day}/{animal.nacimiento.Month}/{animal.nacimiento.Year}");
+            nacimientoCalendarButton.SetLabel($"{animal.nacimiento.Day}/{animal.nacimiento.Month + 1}/{animal.nacimiento.Year}");
 
             dscTextView.Buffer.Text = animal.descripcion;
 
             deleteButton.SetVisible(true);
+
+            var (_, paths) = await Articulo.ReadImages(animal);
+
+            foreach (var path in paths) {
+                imagesPaths.Add(path);
+
+                using var texture = Gdk.Texture.NewFromFilename(path);
+                using var image = Gtk.Image.NewFromPaintable(texture);
+                image.SetPixelSize(196);
+
+                var button = Gtk.Button.New();
+                button.SetChild(image);
+
+                var flowChild = Gtk.FlowBoxChild.New();
+                flowChild.SetChild(button);
+
+                images.Append(flowChild);
+
+                button.OnClicked += (sender, e) => {
+                    imagesPaths.Remove(path);
+                    images.Remove(flowChild);
+                    _ = Articulo.RemoveImage((int)animal.id, path);
+                };
+            }
         }
         else {
             saveButton.SetSensitive(true);
             deleteButton.SetVisible(false);
         }
 
-        nacimientoCalendar.OnDaySelected += (calendar, e) => nacimientoCalendarButton.SetLabel($"{calendar.Day}/{calendar.Month}/{calendar.Year}");
+        nacimientoCalendar.OnDaySelected += (calendar, e) => nacimientoCalendarButton.SetLabel($"{calendar.Day}/{calendar.Month + 1}/{calendar.Year}");
 
         addNewPropertyButton.OnClicked += AddCustomProperty(customPropertyRows, customPropertiesGroup, window);
         addImageButton.OnClicked += AddImage(imagesPaths, images, window);
 
         saveButton.OnClicked += async (sender, e) => {
             if (string.IsNullOrEmpty(nameEntry.GetText()) ||
-                string.IsNullOrEmpty(especieTypeRow.GetText()) ||
                 string.IsNullOrEmpty(razaTypeRow.GetText()) ||
                 !Utils.IsNumber(cantidadEntry.GetText())) {
                 return;
@@ -679,7 +756,7 @@ public class AnimalDialog : ArticuloDialog {
             AnimalVO inputArt = new() {
                 nombre = nameEntry.GetText(),
                 cantidad = int.Parse(cantidadEntry.GetText()),
-                tipo = especieTypeRow.GetText(),
+                tipo = (int)especieTypeRow.GetSelected(),
                 raza = razaTypeRow.GetText(),
                 nacimiento = elapsedTime,
                 descripcion = dscTextView.Buffer.Text
@@ -694,10 +771,15 @@ public class AnimalDialog : ArticuloDialog {
             else {
                 inputArt.id = null;
                 var (err, id) = await Animal.Create(inputArt);
-                if (err != Errors.Ok) {
-                    Utils.ShowCommonErrorDialog(parent, err);
-                }
+                if (err != Errors.Ok) { Utils.ShowCommonErrorDialog(parent, err); }
                 err = await Articulo.AddImages(id, imagesPaths);
+                if (err != Errors.Ok) { Utils.ShowCommonErrorDialog(parent, err); }
+
+                var listOfProperties = new Dictionary<string, string>();
+                foreach (var entry in customPropertyRows) {
+                    listOfProperties[entry.GetTitle()] = entry.GetText();
+                }
+                err = await Animal.AddProperties(id, listOfProperties);
                 Utils.ShowCommonErrorDialog(parent, err);
             }
             window.Close();
@@ -718,7 +800,6 @@ public class AnimalDialog : ArticuloDialog {
         }
         void Validate() {
             if (string.IsNullOrEmpty(nameEntry.GetText()) ||
-                string.IsNullOrEmpty(especieTypeRow.GetText()) ||
                 string.IsNullOrEmpty(razaTypeRow.GetText()) ||
                 !Utils.IsNumber(cantidadEntry.GetText())) {
                 saveButton.SetSensitive(false);
@@ -730,7 +811,7 @@ public class AnimalDialog : ArticuloDialog {
     }
 }
 public class OtroDialog : ArticuloDialog {
-    public static Adw.Window New(OtroVO? otro, Gtk.Window parent) {
+    public static async Task<Adw.Window> NewAsync(OtroVO? otro, Gtk.Window parent) {
         List<string> imagesPaths = new();
         List<Adw.EntryRow> customPropertyRows = new();
 
@@ -789,13 +870,36 @@ public class OtroDialog : ArticuloDialog {
             dscTextView.Buffer.Text = otro.descripcion;
 
             deleteButton.SetVisible(true);
+            var (_, paths) = await Articulo.ReadImages(otro);
+
+            foreach (var path in paths) {
+                imagesPaths.Add(path);
+
+                using var texture = Gdk.Texture.NewFromFilename(path);
+                using var image = Gtk.Image.NewFromPaintable(texture);
+                image.SetPixelSize(196);
+
+                var button = Gtk.Button.New();
+                button.SetChild(image);
+
+                var flowChild = Gtk.FlowBoxChild.New();
+                flowChild.SetChild(button);
+
+                images.Append(flowChild);
+
+                button.OnClicked += (sender, e) => {
+                    imagesPaths.Remove(path);
+                    images.Remove(flowChild);
+                    _ = Articulo.RemoveImage((int)otro.id, path);
+                };
+            }
         }
         else {
             saveButton.SetSensitive(true);
             deleteButton.SetVisible(false);
         }
 
-        nacimientoCalendar.OnDaySelected += (calendar, e) => nacimientoCalendarButton.SetLabel($"{calendar.Day}/{calendar.Month}/{calendar.Year}");
+        nacimientoCalendar.OnDaySelected += (calendar, e) => nacimientoCalendarButton.SetLabel($"{calendar.Day}/{calendar.Month + 1}/{calendar.Year}");
 
         addNewPropertyButton.OnClicked += AddCustomProperty(customPropertyRows, customPropertiesGroup, window);
         addImageButton.OnClicked += AddImage(imagesPaths, images, window);
@@ -824,6 +928,13 @@ public class OtroDialog : ArticuloDialog {
                     Utils.ShowCommonErrorDialog(parent, err);
                 }
                 err = await Articulo.AddImages(id, imagesPaths);
+                if (err != Errors.Ok) { Utils.ShowCommonErrorDialog(parent, err); }
+
+                var listOfProperties = new Dictionary<string, string>();
+                foreach (var entry in customPropertyRows) {
+                    listOfProperties[entry.GetTitle()] = entry.GetText();
+                }
+                err = await Otro.AddProperties(id, listOfProperties);
                 Utils.ShowCommonErrorDialog(parent, err);
             }
             window.Close();

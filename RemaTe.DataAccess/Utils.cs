@@ -14,66 +14,6 @@ using RemaTe.Common.Enums;
 namespace RemaTe.DataAccess;
 
 public abstract class Util<T> {
-    public static void CreateTable(SQLiteConnection dbConn, SQLiteTransaction transaction) {
-        string table = typeof(T).Name.ToLower().Replace("vo", "");
-
-        StringBuilder sb = new();
-        // sb.Append("CREATE TABLE IF NOT EXISTS " + table + " (\n");
-        sb.Append("DROP TABLE IF EXISTS " + table + "; CREATE TABLE " + table + " (\n");
-
-        // Get column names
-        var properties = typeof(T).GetFields();
-        foreach (var prop in properties) {
-            sb.Append($"{prop.Name}\t{TypeToSql(prop.FieldType)},\n");
-        }
-
-        // Get FK column names
-        var propertiesFK = properties.Where((e) => e.CustomAttributes.Any((e) => e.AttributeType == typeof(ForeignKeyAttribute)));
-        foreach (var prop in propertiesFK) {
-            var nme = prop.Name;
-            var rfe = prop.CustomAttributes.Where((e) => e.AttributeType == typeof(ForeignKeyAttribute));
-            foreach (var item in rfe) {
-                var x = item.ConstructorArguments.ElementAt(0).Value;
-                sb.Append($"FOREIGN KEY ({nme}) REFERENCES {x}\n");
-            }
-        }
-
-        // Remove trailing comma and space
-        // sb.Remove(sb.Length - 2, 2);
-
-        // Get Pk column names
-        var propertiesFK2 = properties.Where((e) => e.CustomAttributes.Any((e) => e.AttributeType == typeof(KeyAttribute)));
-        sb.Append("PRIMARY KEY (");
-        foreach (var prop in propertiesFK2) {
-            sb.Append($"{prop.Name}, ");
-        }
-        // Remove trailing comma and space
-        sb.Remove(sb.Length - 2, 2);
-        if (propertiesFK2.Any()) {
-            sb.Append(')');
-        }
-        sb.Append("\n);");
-
-        // Console.WriteLine(sb.ToString());
-
-        using SQLiteCommand cmd = new(sb.ToString(), dbConn, transaction);
-        cmd.ExecuteNonQuery();
-    }
-    static string TypeToSql(Type type) {
-        if (type == typeof(int)) {
-            return "INTEGER";
-        }
-        else if (type == typeof(bool)) {
-            return "BOOLEAN";
-        }
-        else if (type == typeof(long)) {
-            return "INTEGER";
-        }
-        else {
-            return "VARCHAR";
-        }
-    }
-
     public static async Task<Errors> Create(T @object) {
         using SQLiteCommand cmd = new(DBC.I.DbConn);
         using SQLiteTransaction transaction = DBC.I.DbConn.BeginTransaction();

@@ -27,4 +27,9 @@ public class Remate {
             ? await RemateDA.Create(remate)
             : (Errors.Unauthorized, -1);
     }
+    public static async Task<Errors> Update(RemateVO remate) {
+        return Usuario.I.Auth != null && Usuario.I.Auth.permisos >= (byte)Permissions.Empleado
+            ? await RemateDA.Update(remate)
+            : Errors.Unauthorized;
+    }
 }

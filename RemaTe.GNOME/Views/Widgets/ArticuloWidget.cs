@@ -5,6 +5,7 @@ using System.Threading.Tasks;
 using RemaTe.Common.Models;
 using RemaTe.GNOME.Helpers;
 using RemaTe.Logic;
+using RemaTe.Shared.Models;
 
 namespace RemaTe.GNOME.Views.Widgets;
 
@@ -29,7 +30,7 @@ static class ArticuloWidget {
         if (articulo is AnimalVO) {
             var especieActionRow = Adw.ActionRow.New();
             especieActionRow.SetTitle("Tipo");
-            especieActionRow.SetSubtitle((articulo as AnimalVO).tipo);
+            especieActionRow.SetSubtitle(AppInfo.EspeciesAnimales[(articulo as AnimalVO).tipo]);
             especieActionRow.SetCssClasses(new[] { "property", "card" });
             _propertiesFlowBox.Append(especieActionRow);
 
@@ -44,6 +45,15 @@ static class ArticuloWidget {
             nacimientoActionRow.SetSubtitle((articulo as AnimalVO).nacimiento.ToShortDateString());
             nacimientoActionRow.SetCssClasses(new[] { "property", "card" });
             _propertiesFlowBox.Append(nacimientoActionRow);
+
+            var (_, prop) = await Animal.ReadProperties((int)articulo.id);
+            foreach (var pr in prop) {
+                var actionRow = Adw.ActionRow.New();
+                actionRow.SetTitle(pr.Key);
+                actionRow.SetSubtitle(pr.Value);
+                actionRow.AddCssClass("card");
+                _propertiesFlowBox.Append(actionRow);
+            }
         }
         else if (articulo is MaquinariaVO) {
             var marcaActionRow = Adw.ActionRow.New();
@@ -63,6 +73,25 @@ static class ArticuloWidget {
             añoActionRow.SetSubtitle((articulo as MaquinariaVO).año.ToString());
             añoActionRow.SetCssClasses(new[] { "property", "card" });
             _propertiesFlowBox.Append(añoActionRow);
+
+            var (_, prop) = await Maquinaria.ReadProperties((int)articulo.id);
+            foreach (var pr in prop) {
+                var actionRow = Adw.ActionRow.New();
+                actionRow.SetTitle(pr.Key);
+                actionRow.SetSubtitle(pr.Value);
+                actionRow.AddCssClass("card");
+                _propertiesFlowBox.Append(actionRow);
+            }
+        }
+        else {
+            var (_, prop) = await Otro.ReadProperties((int)articulo.id);
+            foreach (var pr in prop) {
+                var actionRow = Adw.ActionRow.New();
+                actionRow.SetTitle(pr.Key);
+                actionRow.SetSubtitle(pr.Value);
+                actionRow.AddCssClass("card");
+                _propertiesFlowBox.Append(actionRow);
+            }
         }
 
         var (err, imagenes) = await Articulo.ReadImages(articulo);
@@ -80,11 +109,11 @@ static class ArticuloWidget {
         return builder.GetObject("_root") as Adw.Bin;
     }
 
-    public static void EditArticulo(Gtk.Window? parent, ArticuloVO articulo) {
+    public static async void EditArticulo(Gtk.Window? parent, ArticuloVO articulo) {
         Adw.Window editWindow = articulo switch {
-            AnimalVO => AnimalDialog.New(articulo as AnimalVO, parent),
-            MaquinariaVO => MaquinariaDialog.New(articulo as MaquinariaVO, parent),
-            _ => OtroDialog.New(articulo as OtroVO, parent),
+            AnimalVO => await AnimalDialog.NewAsync(articulo as AnimalVO, parent),
+            MaquinariaVO => await MaquinariaDialog.NewAsync(articulo as MaquinariaVO, parent),
+            _ => await OtroDialog.NewAsync(articulo as OtroVO, parent),
         };
         editWindow.SetIconName("emoji-nature-symbolic");
         editWindow.Present();

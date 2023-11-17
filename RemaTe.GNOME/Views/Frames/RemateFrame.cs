@@ -1,5 +1,8 @@
+using System.Threading.Tasks;
+
 using RemaTe.Common.Models;
 using RemaTe.GNOME.Helpers;
+using RemaTe.Logic;
 
 namespace RemaTe.GNOME.Views.Widgets;
 class RemateFrame : Adw.Bin {
@@ -29,7 +32,10 @@ class RemateFrame : Adw.Bin {
 
         foreach (var lote in remate.lotes) {
             var card = Adw.Bin.New();
-            card.SetChild(new LoteFrame(lote, parent, onClicked: ShowSellDialog(parent)));
+
+            var (sold, price) = Lote.GetSellPrice((int)lote.id);
+
+            card.SetChild(new LoteFrame(lote, parent, onClicked: sold == Common.Enums.Errors.Ok ? (_, _) => { } : ShowSellDialog(parent, lote), buttonLabel: sold == Common.Enums.Errors.Ok ? "Vendido: $" + price : "Vender"));
             card.SetHexpand(true);
             card.SetVexpand(true);
             card.AddCssClass("card");
@@ -43,29 +49,39 @@ class RemateFrame : Adw.Bin {
         editWindow.Present();
     }
 
-    protected static GObject.SignalHandler<Gtk.Button> ShowSellDialog(Gtk.Window window) {
-        return (sender, e) => {
-            var dialog = Adw.MessageDialog.New(window, "Vernder lote", "");
-            var group = Adw.PreferencesGroup.New();
-            var precioRow = Adw.EntryRow.New();
-            precioRow.SetTitle("Precio");
-            group.Add(precioRow);
-            var entryRow = Adw.EntryRow.New();
-            entryRow.SetTitle("Adjudicado a");
-            group.Add(entryRow);
-            dialog.SetExtraChild(group);
-            dialog.AddResponse("cancel", "Cancelar");
-            dialog.AddResponse("suggested", "Confirmar");
-            dialog.SetResponseAppearance("suggested", Adw.ResponseAppearance.Suggested);
-            dialog.SetDefaultResponse("suggested");
-            dialog.SetCloseResponse("cancel");
-            dialog.OnResponse += (s, ea) => {
-                if (!string.IsNullOrEmpty(entryRow.GetText()) && entryRow.GetText() != "NULL") {
-                    // TODO SELL LOTE
-                }
-                dialog.Destroy();
-            };
-            dialog.Present();
+    protected static GObject.SignalHandler<Gtk.Button> ShowSellDialog(Gtk.Window window, LoteVO lote) => (sender, e) => {
+        var dialog = Adw.MessageDialog.New(window, "Vernder lote", "");
+        dialog.SetModal(false);
+        var group = Gtk.Box.New(Gtk.Orientation.Vertical, 24);
+        var precioRow = Adw.EntryRow.New();
+        precioRow.SetTitle("Precio");
+        precioRow.AddCssClass("card");
+        group.Append(precioRow);
+        var button = Gtk.Button.New();
+        var buttonContent = Adw.ButtonContent.New();
+        buttonContent.SetLabel("Adjudicado a");
+        buttonContent.SetIconName("avatar-default-symbolic");
+        button.SetChild(buttonContent);
+        button.AddCssClass("action-row");
+        var tcs = new TaskCompletionSource<ClienteVO>();
+        button.OnClicked += (sender, e) => {
+            var dialog = new ChooseUserDialog(window, tcs);
+            dialog.Show();
         };
-    }
+        group.Append(button);
+        dialog.SetExtraChild(group);
+        dialog.AddResponse("cancel", "Cancelar");
+        dialog.AddResponse("suggested", "Confirmar");
+        dialog.SetResponseAppearance("suggested", Adw.ResponseAppearance.Suggested);
+        dialog.SetDefaultResponse("suggested");
+        dialog.SetCloseResponse("cancel");
+        dialog.OnResponse += async (s, ea) => {
+            if (Utils.IsNumber(precioRow.GetText()) &&
+            tcs.Task.Status == TaskStatus.RanToCompletion) {
+                await Lote.Sell((int)lote.id, (await tcs.Task).ci, int.Parse(precioRow.GetText()));
+            }
+            dialog.Destroy();
+        };
+        dialog.Present();
+    };
 }
