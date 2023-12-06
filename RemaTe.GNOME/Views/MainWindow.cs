@@ -76,7 +76,7 @@ public partial class MainWindow : Adw.ApplicationWindow {
         application.SetAccelsForAction("win.quit", new string[] { "<Ctrl>q" });
         //Help Action
         var actHelp = Gio.SimpleAction.New("help", null);
-        actHelp.OnActivate += (sender, e) => Gtk.Functions.ShowUri(this, "file:/var/home/potato/Documentos/remate.html", 0);
+        actHelp.OnActivate += (sender, e) => Gtk.Functions.ShowUri(this, "file:remate.html", 0);
         AddAction(actHelp);
         application.SetAccelsForAction("win.help", new string[] { "F1" });
         //About Action
